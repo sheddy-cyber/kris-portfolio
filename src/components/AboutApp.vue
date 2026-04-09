@@ -43,7 +43,7 @@
         <span>KRIS</span>
         <span>SHEDRACH</span>
       </div>
-      <div class="about-title">I command computers to do my bidding</div>
+      <div class="about-title">your go-to engineer for anything web</div>
       <div class="about-tags">
         <span class="a-tag">Web Design</span>
         <span class="a-tag">Mobile Dev</span>

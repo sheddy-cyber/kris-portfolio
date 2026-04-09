@@ -1,38 +1,45 @@
 <template>
   <Teleport to="body">
-    <!-- Main crosshair cursor -->
-    <div class="cursor-ring"     :style="ringStyle"></div>
-    <div class="cursor-dot"      :style="dotStyle"></div>
+    <template v-if="!isTouch">
+      <!-- Main crosshair cursor -->
+      <div class="cursor-ring" :style="ringStyle"></div>
+      <div class="cursor-dot"  :style="dotStyle"></div>
 
-    <!-- Trail particles -->
-    <div
-      v-for="p in trail"
-      :key="p.id"
-      class="cursor-trail"
-      :style="{
-        left:    p.x + 'px',
-        top:     p.y + 'px',
-        opacity: p.life / TRAIL_MAX_LIFE,
-        transform: `translate(-50%, -50%) scale(${p.life / TRAIL_MAX_LIFE})`,
-        background: p.color,
-      }"
-    ></div>
+      <!-- Trail particles -->
+      <div
+        v-for="p in trail"
+        :key="p.id"
+        class="cursor-trail"
+        :style="{
+          left:    p.x + 'px',
+          top:     p.y + 'px',
+          opacity: p.life / TRAIL_MAX_LIFE,
+          transform: `translate(-50%, -50%) scale(${p.life / TRAIL_MAX_LIFE})`,
+          background: p.color,
+        }"
+      ></div>
+    </template>
   </Teleport>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 
+// ── TOUCH DETECTION ───────────────────────────────
+// On touch-primary devices we skip the custom cursor entirely
+// so the system cursor (finger/pointer) shows normally
+const isTouch = ref(false)
+
 // ── CONFIG ────────────────────────────────────────
-const TRAIL_MAX_LIFE  = 22   // frames a trail dot lives
-const TRAIL_INTERVAL  = 3    // spawn a trail dot every N mousemove events
+const TRAIL_MAX_LIFE  = 22
+const TRAIL_INTERVAL  = 3
 const TRAIL_COLORS    = ['#58a6ff','#7bcfff','#3fb950','#58a6ff','#a5d6ff']
 
 // ── STATE ─────────────────────────────────────────
-const mx = ref(-200)         // mouse x (off-screen until first move)
-const my = ref(-200)         // mouse y
-const rx = ref(-200)         // ring x (lerped)
-const ry = ref(-200)         // ring y (lerped)
+const mx = ref(-200)
+const my = ref(-200)
+const rx = ref(-200)
+const ry = ref(-200)
 const clicking = ref(false)
 const trail    = reactive([])
 
@@ -57,8 +64,6 @@ const ringStyle = computed(() => ({
 function onMouseMove(e) {
   mx.value = e.clientX
   my.value = e.clientY
-
-  // Spawn trail particle every N moves
   moveCount++
   if (moveCount % TRAIL_INTERVAL === 0) {
     trail.push({
@@ -68,7 +73,6 @@ function onMouseMove(e) {
       life:  TRAIL_MAX_LIFE,
       color: TRAIL_COLORS[trailId % TRAIL_COLORS.length],
     })
-    // Keep array lean
     if (trail.length > 40) trail.splice(0, trail.length - 40)
   }
 }
@@ -78,21 +82,21 @@ function onMouseUp()   { clicking.value = false }
 
 // ── ANIMATION LOOP ────────────────────────────────
 function tick() {
-  // Lerp ring toward dot (smooth lag effect)
   rx.value += (mx.value - rx.value) * 0.18
   ry.value += (my.value - ry.value) * 0.18
-
-  // Age trail particles
   for (let i = trail.length - 1; i >= 0; i--) {
     trail[i].life--
     if (trail[i].life <= 0) trail.splice(i, 1)
   }
-
   rafId = requestAnimationFrame(tick)
 }
 
 // ── LIFECYCLE ─────────────────────────────────────
 onMounted(() => {
+  // Detect touch-primary device
+  isTouch.value = window.matchMedia('(pointer: coarse)').matches
+
+  if (isTouch.value) return  // leave system cursor on touch devices
   window.addEventListener('mousemove',  onMouseMove, { passive: true })
   window.addEventListener('mousedown',  onMouseDown)
   window.addEventListener('mouseup',    onMouseUp)
@@ -103,13 +107,16 @@ onUnmounted(() => {
   window.removeEventListener('mousemove',  onMouseMove)
   window.removeEventListener('mousedown',  onMouseDown)
   window.removeEventListener('mouseup',    onMouseUp)
-  cancelAnimationFrame(rafId)
+  if (rafId) cancelAnimationFrame(rafId)
 })
 </script>
 
 <style scoped>
-/* Hide the default system cursor globally when this component mounts */
+/* Hide system cursor only on non-touch (pointer:fine) devices */
 :global(*) { cursor: none !important; }
+@media (pointer: coarse) {
+  :global(*) { cursor: auto !important; }
+}
 
 /* ── Dot — sharp centre point ── */
 .cursor-dot {
@@ -134,12 +141,11 @@ onUnmounted(() => {
   z-index: 2147483646;
   transition: transform 0.12s ease;
   will-change: transform, left, top;
-  /* Crosshair tick marks */
   box-shadow:
-    0   -10px 0 0 rgba(88,166,255,0.4),   /* top tick */
-    0    10px 0 0 rgba(88,166,255,0.4),   /* bottom tick */
-    -10px  0  0 0 rgba(88,166,255,0.4),   /* left tick */
-    10px   0  0 0 rgba(88,166,255,0.4);   /* right tick */
+    0   -10px 0 0 rgba(88,166,255,0.4),
+    0    10px 0 0 rgba(88,166,255,0.4),
+    -10px  0  0 0 rgba(88,166,255,0.4),
+    10px   0  0 0 rgba(88,166,255,0.4);
 }
 
 /* ── Trail dots ── */

@@ -471,11 +471,128 @@ input, textarea { -webkit-user-select: text; user-select: text; }
 .send-confirm { font-family: var(--font-mono); font-size: 11px; color: var(--green); text-align: center; animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; } }
 
+/* ════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS
+   ════════════════════════════════════════════════ */
+
+/* Disable desktop icons on mobile — use start menu instead */
 @media (max-width: 768px) {
-  .about-body { flex-direction: column; }
-  .about-left { width: 100%; }
-  .services-grid { grid-template-columns: 1fr; }
-  .contact-body { flex-direction: column; }
-  .contact-left { width: 100%; }
+  /* ── Desktop icons — hidden on narrow screens */
+  .desk-icons { display: none; }
+
+  /* ── Taskbar compact */
+  .tb-logo {
+    font-size: 11px; letter-spacing: 2px; padding: 5px 10px;
+    /* Pulse animation on mobile to hint it's tappable */
+    animation: logoPulse 2.5s ease-in-out infinite alternate;
+    position: relative;
+  }
+  .tb-logo::after {
+    content: '▲ MENU';
+    position: absolute;
+    bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 8px; color: var(--accent);
+    white-space: nowrap; opacity: 0;
+    animation: menuHint 4s ease 1.5s forwards;
+  }
+  @keyframes menuHint {
+    0%,80% { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    30%,60% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100%    { opacity: 0; }
+  }
   .tb-indicator { display: none; }
+  .tb-clock { font-size: 10px; min-width: 56px; }
+  .tb-app { padding: 0 8px; font-size: 10px; }
+  .tb-apps { gap: 2px; }
+
+  /* ── Windows fill screen on mobile */
+  .os-window {
+    position: fixed !important;
+    left: 0   !important;
+    top:  0   !important;
+    width:  100vw !important;
+    height: calc(100dvh - var(--taskbar-h)) !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    min-width: unset !important;
+    min-height: unset !important;
+  }
+  /* Disable drag/resize on mobile */
+  .win-titlebar { cursor: default; }
+  .win-resize   { display: none; }
+  /* Larger touch targets on titlebar dots */
+  .win-dot { width: 16px; height: 16px; }
+
+  /* ── About window */
+  .about-body {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    overflow-y: auto;
+  }
+  .about-left { width: 100%; align-items: center; padding-top: 0; }
+  .about-avatar { width: 90px; height: 90px; }
+  .about-name { font-size: 14px; letter-spacing: 2px; }
+  .about-tags { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .a-tag { padding: 4px 8px; }
+  .about-right { overflow-y: visible; padding-right: 0; }
+  .sbar-name { width: 88px; font-size: 10px; }
+
+  /* ── Services window */
+  .services-body { padding: 14px; }
+  .services-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  /* ── Works window */
+  .works-body { padding: 12px; gap: 10px; }
+  .works-grid { grid-template-columns: 1fr; }
+  .works-topbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .works-filter { flex-wrap: wrap; gap: 4px; }
+  .wf-btn { font-size: 9px; padding: 4px 10px; }
+
+  /* ── Contact window */
+  .contact-body { flex-direction: column; }
+  .contact-left {
+    width: 100%; padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row; flex-wrap: wrap; gap: 10px; align-items: flex-start;
+  }
+  .cl-avatar { width: 52px; height: 52px; }
+  .cl-headline { font-size: 15px; }
+  .contact-links { gap: 6px; }
+  .clink { font-size: 10px; }
+  .contact-right { padding: 14px; }
+  .cf-group textarea { height: 70px; }
+
+  /* ── Game window */
+  .game-challenge-banner { padding: 8px 12px; gap: 10px; }
+  .gcb-title { font-size: 9px; letter-spacing: 2px; }
+  .gcb-sub   { font-size: 10px; }
+  .game-hud  { padding: 6px 12px; }
+  .hud-val   { font-size: 16px; }
+  .hud-label { font-size: 8px; }
+
+  /* ── Start menu wider on mobile */
+  .start-menu { width: calc(100vw - 32px); }
 }
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .about-name { font-size: 13px; }
+  .go-scores  { gap: 16px; }
+  .go-score-val { font-size: 18px; }
+  .go-title   { font-size: 16px; letter-spacing: 3px; }
+}
+
+/* Landscape phones — limit window height */
+@media (max-height: 500px) and (max-width: 900px) {
+  .os-window {
+    height: calc(100dvh - var(--taskbar-h)) !important;
+  }
+  .about-body { flex-direction: row; overflow-y: auto; }
+  .about-left { width: 150px; }
+  .game-challenge-banner { display: none; } /* save vertical space in landscape */
+}
+
