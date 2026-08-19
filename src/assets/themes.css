@@ -1,0 +1,201 @@
+/* ════════════════════════════════════════════════════════════════
+   KRIS SHEDRACH PORTFOLIO OS — 5 MULTI-THEME DESIGN TOKENS
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 01. TWITTER / X DARK (DEFAULT SYSTEM THEME) ─────────── */
+:root,
+[data-theme="twitter"],
+[data-theme="titanium"] {
+  --taskbar-h: 48px;
+
+  /* Ultra-Deep Obsidian Slate Blacks */
+  --bg-0: #020406;
+  --bg-1: #07090e;
+  --bg-2: #0e1219;
+  --bg-3: #151a24;
+  --bg-4: #1d2330;
+
+  /* High-Performance Frosted Glass */
+  --surface-glass: rgba(7, 9, 14, 0.80);
+  --surface-glass-heavy: rgba(3, 4, 7, 0.95);
+  --surface-glass-card: rgba(14, 18, 25, 0.65);
+
+  /* Precision Micro-Borders */
+  --border: rgba(148, 163, 184, 0.14);
+  --border-2: rgba(56, 189, 248, 0.24);
+  --border-glow: rgba(56, 189, 248, 0.45);
+
+  /* Crisp Typography Hierarchy */
+  --text-0: #f8fafc;
+  --text-1: #94a3b8;
+  --text-2: #64748b;
+
+  /* Iconic Twitter / Luminous Electric Cyan Accents */
+  --accent: #1d9bf0;
+  --accent-2: #38bdf8;
+  --accent-dim: rgba(29, 155, 240, 0.14);
+  --accent-glow: rgba(29, 155, 240, 0.35);
+
+  /* Harmonious Functional Colors */
+  --green: #10b981;
+  --green-dim: rgba(16, 185, 129, 0.14);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245, 158, 11, 0.14);
+  --red: #f43f5e;
+  --red-dim: rgba(244, 63, 94, 0.14);
+  --purple: #a78bfa;
+
+  /* Ambient Glow & Blueprint Grid */
+  --wallpaper-overlay: radial-gradient(circle at 50% -5%, rgba(29, 155, 240, 0.08) 0%, rgba(56, 189, 248, 0.04) 40%, transparent 70%);
+  --grid-color: rgba(148, 163, 184, 0.07);
+}
+
+/* ── 02. NEO TOKYO ────────────────────────────────────────── */
+[data-theme="neo-tokyo"],
+[data-theme="tokyo"] {
+  --bg-0: #080510;
+  --bg-1: #0f091c;
+  --bg-2: #170f2b;
+  --bg-3: #22163d;
+  --bg-4: #302052;
+  --surface-glass: rgba(15, 9, 28, 0.80);
+  --surface-glass-heavy: rgba(8, 5, 16, 0.95);
+  --surface-glass-card: rgba(23, 15, 43, 0.68);
+  
+  --border: rgba(244, 63, 94, 0.20);
+  --border-2: rgba(168, 85, 247, 0.32);
+  --border-glow: rgba(244, 63, 94, 0.55);
+  
+  --text-0: #fdf4ff;
+  --text-1: #c084fc;
+  --text-2: #7e22ce;
+  
+  --accent: #f43f5e;
+  --accent-2: #a855f7;
+  --accent-dim: rgba(244, 63, 94, 0.15);
+  --accent-glow: rgba(244, 63, 94, 0.40);
+  
+  --green: #06b6d4;
+  --green-dim: rgba(6, 182, 212, 0.14);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251, 191, 36, 0.14);
+  --red: #ff0055;
+  --red-dim: rgba(255, 0, 85, 0.14);
+  --purple: #d946ef;
+
+  --wallpaper-overlay: radial-gradient(circle at 60% 10%, rgba(244, 63, 94, 0.10) 0%, rgba(168, 85, 247, 0.08) 40%, transparent 70%);
+  --grid-color: rgba(168, 85, 247, 0.16);
+}
+
+/* ── 03. MATRIX PHOSPHOR ─────────────────────────────────── */
+[data-theme="matrix"] {
+  --bg-0: #020703;
+  --bg-1: #051208;
+  --bg-2: #0b1f10;
+  --bg-3: #122c17;
+  --bg-4: #1c4224;
+  --surface-glass: rgba(5, 18, 8, 0.82);
+  --surface-glass-heavy: rgba(2, 7, 3, 0.95);
+  --surface-glass-card: rgba(11, 31, 16, 0.70);
+  
+  --border: rgba(34, 197, 94, 0.20);
+  --border-2: rgba(74, 222, 128, 0.32);
+  --border-glow: rgba(34, 197, 94, 0.55);
+  
+  --text-0: #f0fdf4;
+  --text-1: #86efac;
+  --text-2: #4ade80;
+  
+  --accent: #22c55e;
+  --accent-2: #4ade80;
+  --accent-dim: rgba(34, 197, 94, 0.15);
+  --accent-glow: rgba(34, 197, 94, 0.45);
+  
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.16);
+  --amber: #eab308;
+  --amber-dim: rgba(234, 179, 8, 0.14);
+  --red: #ef4444;
+  --red-dim: rgba(239, 68, 68, 0.14);
+  --purple: #10b981;
+
+  --wallpaper-overlay: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.10) 0%, transparent 60%);
+  --grid-color: rgba(34, 197, 94, 0.18);
+}
+
+/* ── 04. OBSIDIAN SOLAR GOLD ──────────────────────────────── */
+[data-theme="obsidian-gold"],
+[data-theme="solar"] {
+  --bg-0: #070503;
+  --bg-1: #100b06;
+  --bg-2: #1a130b;
+  --bg-3: #261c11;
+  --bg-4: #382b1b;
+  --surface-glass: rgba(16, 11, 6, 0.80);
+  --surface-glass-heavy: rgba(7, 5, 3, 0.95);
+  --surface-glass-card: rgba(26, 19, 11, 0.68);
+  
+  --border: rgba(245, 158, 11, 0.20);
+  --border-2: rgba(251, 191, 36, 0.32);
+  --border-glow: rgba(245, 158, 11, 0.50);
+  
+  --text-0: #fffbeb;
+  --text-1: #fde68a;
+  --text-2: #d97706;
+  
+  --accent: #f59e0b;
+  --accent-2: #fbbf24;
+  --accent-dim: rgba(245, 158, 11, 0.15);
+  --accent-glow: rgba(245, 158, 11, 0.40);
+  
+  --green: #10b981;
+  --green-dim: rgba(16, 185, 129, 0.14);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245, 158, 11, 0.14);
+  --red: #f43f5e;
+  --red-dim: rgba(244, 63, 94, 0.14);
+  --purple: #d97706;
+
+  --wallpaper-overlay: radial-gradient(circle at 50% 10%, rgba(245, 158, 11, 0.10) 0%, transparent 60%);
+  --grid-color: rgba(245, 158, 11, 0.15);
+}
+
+/* ── 05. DAYLIGHT (LIGHT MODE — LISTED LAST) ──────────────── */
+[data-theme="daylight"],
+[data-theme="cyber-cyan"],
+[data-theme="light"] {
+  /* Crisp Luminous Light Glass Surfaces */
+  --bg-0: #edf3f8;
+  --bg-1: #f8fafc;
+  --bg-2: #ffffff;
+  --bg-3: #e2e8f0;
+  --bg-4: #cbd5e1;
+
+  --surface-glass: rgba(248, 250, 252, 0.90);
+  --surface-glass-heavy: rgba(255, 255, 255, 0.97);
+  --surface-glass-card: rgba(255, 255, 255, 0.92);
+
+  --border: rgba(15, 23, 42, 0.10);
+  --border-2: rgba(2, 132, 199, 0.30);
+  --border-glow: rgba(2, 132, 199, 0.35);
+
+  --text-0: #0f172a;
+  --text-1: #334155;
+  --text-2: #64748b;
+
+  --accent: #0284c7;
+  --accent-2: #0369a1;
+  --accent-dim: rgba(2, 132, 199, 0.12);
+  --accent-glow: rgba(2, 132, 199, 0.25);
+
+  --green: #059669;
+  --green-dim: rgba(5, 150, 105, 0.12);
+  --amber: #d97706;
+  --amber-dim: rgba(217, 119, 6, 0.12);
+  --red: #e11d48;
+  --red-dim: rgba(225, 29, 72, 0.12);
+  --purple: #7c3aed;
+
+  --wallpaper-overlay: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.14) 0%, rgba(237, 243, 248, 0.6) 65%, transparent 100%);
+  --grid-color: rgba(15, 23, 42, 0.06);
+}

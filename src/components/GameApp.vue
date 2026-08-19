@@ -1,488 +1,634 @@
 <template>
   <div class="game-body">
-
-    <!-- Challenge banner -->
+    <!-- Challenge Header Banner -->
     <div class="game-challenge-banner">
-      <div class="gcb-trophy">🏆</div>
+      <div class="gcb-trophy">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4v4zm12 0h2a2 2 0 0 0 2-2V5h-4v4z"/><path d="M6 5h12v6a6 6 0 0 1-12 0V5z"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+      </div>
       <div class="gcb-text">
-        <div class="gcb-title">CAN YOU BEAT MY HIGH SCORE?</div>
-        <div class="gcb-sub">My record: <strong>{{ KRIS_SCORE }} pts</strong> — Dare you try?</div>
+        <div class="gcb-title">QUANTUM PILOT // CYBER FLIGHT</div>
+        <div class="gcb-sub">Kris's Developer Record: <strong>{{ KRIS_SCORE }} PTS</strong> — Think you can beat me?</div>
       </div>
     </div>
 
-    <!-- HUD -->
+    <!-- Live Game HUD -->
     <div class="game-hud">
       <div class="hud-item">
         <div class="hud-label">YOUR SCORE</div>
-        <div class="hud-val">{{ score }}</div>
+        <div class="hud-val" :class="{ 'beat-kris': score > KRIS_SCORE }">{{ score }}</div>
       </div>
       <div class="hud-item hud-center">
-        <div class="hud-label">MY HIGH SCORE</div>
+        <div class="hud-label">COMBO MULTIPLIER</div>
+        <div class="hud-val hud-combo">{{ combo }}x</div>
+      </div>
+      <div class="hud-item hud-center">
+        <div class="hud-label">KRIS'S RECORD</div>
         <div class="hud-val hud-rival">{{ KRIS_SCORE }}</div>
       </div>
       <div class="hud-item hud-right">
-        <div class="hud-label">YOUR BEST</div>
-        <div class="hud-val" :style="{ color: playerBest > KRIS_SCORE ? '#ffd700' : '#fff' }">{{ playerBest }}</div>
+        <div class="hud-label">YOUR ALL-TIME BEST</div>
+        <div class="hud-val" :style="{ color: playerBest > KRIS_SCORE ? 'var(--amber)' : 'var(--text-0)' }">{{ playerBest }}</div>
       </div>
     </div>
 
-    <!-- Canvas area -->
-    <div class="cp-wrap" ref="wrapEl" @click="onTap" @touchstart.prevent="onTap">
+    <!-- Canvas Play Area -->
+    <div class="cp-wrap" ref="wrapEl" @mousedown="onTap" @touchstart.prevent="onTap">
       <canvas ref="canvasEl" class="cp-canvas"></canvas>
 
-      <!-- Overlay (start / dead) -->
+      <!-- Overlay States (Start / Game Over) -->
       <div v-if="phase !== 'playing'" class="game-overlay">
         <div class="go-inner">
-
           <template v-if="phase === 'start'">
-            <div class="go-plane-anim">✈</div>
-            <div class="go-title">CRASHY PLANE</div>
-            <div class="go-tagline">Tap or click to fly. Dodge the towers.</div>
-            <div class="go-record">🏆 My record: <strong>{{ KRIS_SCORE }} pts</strong></div>
-            <button class="go-btn" @click.stop="startGame">▶ FLY NOW</button>
-            <div class="go-hint">Click / Tap = go up &nbsp;·&nbsp; Let go = fall &nbsp;·&nbsp; P = pause</div>
+            <div class="go-plane-anim">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
+            </div>
+            <div class="go-title">QUANTUM PILOT</div>
+            <div class="go-tagline">Click/Tap to Fly & Blast Lasers · Dodge Cyber Towers</div>
+            <div class="go-record">TARGET RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></div>
+            <button class="go-btn" @click.stop="startGame">▶ ENGAGE FLIGHT</button>
+            <div class="go-hint">Left-Click/Tap = Thruster & Fire &nbsp;·&nbsp; Spacebar = Fire Laser &nbsp;·&nbsp; P = Pause</div>
           </template>
 
           <template v-if="phase === 'dead'">
-            <div class="go-plane-anim" style="animation:none;filter:grayscale(1) brightness(0.7)">💥</div>
-            <div class="go-title" :style="{ color: score > KRIS_SCORE ? '#ffd700':'#fff' }">
-              {{ score > KRIS_SCORE ? '🏆 YOU BEAT ME!' : 'CRASHED!' }}
+            <div class="go-plane-anim" style="animation:none;">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             </div>
-            <div class="go-tagline" :style="{ color: score > KRIS_SCORE ? '#ffd700':'var(--cp-muted)' }">
+            <div class="go-title" :style="{ color: score > KRIS_SCORE ? 'var(--amber)' : 'var(--red)' }">
+              {{ score > KRIS_SCORE ? 'RECORD SHATTERED!' : 'SYSTEM CRASHED!' }}
+            </div>
+            <div class="go-tagline">
               {{ score > KRIS_SCORE
-                ? 'Unbelievable. You actually did it.'
-                : "I'm still the champion… for now." }}
+                ? 'Incredible! You beat Kris Shedrach on his own operating system.'
+                : 'Systems offline. Reroute backup power and try again.' }}
             </div>
+
             <div class="go-scores">
               <div class="go-score-col">
-                <div class="go-score-label">YOUR SCORE</div>
-                <div class="go-score-val" :style="{ color: score > KRIS_SCORE ? '#ffd700':'#fff' }">{{ score }}</div>
+                <div class="go-score-label">FINAL SCORE</div>
+                <div class="go-score-val" :style="{ color: score > KRIS_SCORE ? 'var(--amber)' : '#ffffff' }">{{ score }}</div>
               </div>
               <div class="go-score-col">
-                <div class="go-score-label">MY BEST</div>
-                <div class="go-score-val" style="color:#ffd700">{{ KRIS_SCORE }}</div>
+                <div class="go-score-label">KRIS'S RECORD</div>
+                <div class="go-score-val" style="color:var(--amber)">{{ KRIS_SCORE }}</div>
               </div>
               <div class="go-score-col">
                 <div class="go-score-label">YOUR BEST</div>
-                <div class="go-score-val" :style="{ color: playerBest > KRIS_SCORE ? '#ffd700':'#fff' }">{{ playerBest }}</div>
+                <div class="go-score-val" style="color:#ffffff">{{ playerBest }}</div>
               </div>
             </div>
-            <button class="go-btn" @click.stop="startGame">▶ FLY AGAIN</button>
-          </template>
 
+            <button class="go-btn" @click.stop="startGame">▶ RESTART MISSION</button>
+          </template>
         </div>
       </div>
     </div>
 
-    <div class="cp-hint">Click / Tap to go UP &nbsp;|&nbsp; Release to fall &nbsp;|&nbsp; P Pause</div>
+    <!-- Controls Bar -->
+    <div class="cp-hint">
+      <span>CLICK / TAP / SPACE: THRUST & SHOOT</span>
+      <span>|</span>
+      <span>DESTROY DRONES FOR 5x COMBO</span>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { soundFx } from '../audio/soundFx'
 
-const props = defineProps({ active: { type: Boolean, default: true } })
+const props = defineProps({
+  active: { type: Boolean, default: true }
+})
 
-// ─── TUNING ────────────────────────────────────────────────────
-const KRIS_SCORE    = 31
-const GRAVITY       = 0.22        // was 0.40 — gentler fall
-const FLAP_VEL      = -5.8        // was -7.5 — softer tap punch
-const HOLD_LIFT     = -0.08       // sustained hold lift per frame
-const TERMINAL_VEL  = 7           // max fall speed cap
-const PIPE_W        = 54
-const PIPE_GAP      = 155         // slightly wider gap gives more room
-const PIPE_SPD_BASE = 2.4
-const PIPE_SPD_STEP = 0.18
-const PIPE_EVERY    = 130
-const PLANE_R       = 0.22
-const PW            = 46
-const PH            = 26
-const GH            = 46
+const KRIS_SCORE = 1560
+const LS_KEY = 'kris_portfolio_best_score_v2'
 
-// ─── REFS ─────────────────────────────────────────────────────
-const canvasEl   = ref(null)
-const wrapEl     = ref(null)
-const phase      = ref('start')
-const score      = ref(0)
+const canvasEl = ref(null)
+const wrapEl = ref(null)
+const phase = ref('start')
+const score = ref(0)
+const combo = ref(1)
 const playerBest = ref(0)
 
-const LS_KEY = 'kris_portfolio_best_score'
+let ctx, W, H
+let rafId = null
+let py, vy, held
+let pipes, lasers, drones, particles, frame
+let paused = false
 
-// Load saved best from localStorage on mount
 onMounted(() => {
   try {
     const saved = localStorage.getItem(LS_KEY)
     if (saved !== null) playerBest.value = parseInt(saved, 10) || 0
   } catch (_) {}
+
+  window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('keyup', onKeyUp)
+
+  initCanvas()
 })
 
-// Persist best whenever it changes
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+  window.removeEventListener('keyup', onKeyUp)
+  if (rafId) cancelAnimationFrame(rafId)
+})
+
 watch(playerBest, val => {
   try { localStorage.setItem(LS_KEY, String(val)) } catch (_) {}
 })
 
-let ctx, W, H
-let rafId = null
-
-// mutable game state
-let py, vy, held
-let pipes, pTimer, frame
-let clouds, sparks
-
-// ─── HELPERS ──────────────────────────────────────────────────
-const px = () => W * PLANE_R
-const spd = () => PIPE_SPD_BASE + Math.floor(score.value / 10) * PIPE_SPD_STEP
-
-function reset() {
-  py = H * 0.42; vy = 0; held = false
-  pipes = []; pTimer = 0; frame = 0; sparks = []
-  score.value = 0
-  clouds = Array.from({ length: 5 }, (_, i) => ({
-    x: (i / 5) * W + 30,
-    y: 20 + Math.random() * (H * 0.38),
-    w: 55 + Math.random() * 70,
-    s: 0.3 + Math.random() * 0.4,
-    a: 0.05 + Math.random() * 0.07,
-  }))
+function initCanvas() {
+  if (!canvasEl.value || !wrapEl.value) return
+  W = wrapEl.value.clientWidth || 580
+  H = wrapEl.value.clientHeight || 340
+  canvasEl.value.width = W
+  canvasEl.value.height = H
+  ctx = canvasEl.value.getContext('2d')
+  reset()
+  draw()
 }
 
-// ─── MAIN LOOP ─────────────────────────────────────────────────
+const BASE_PIPE_SPEED = 2.4
+const BASE_DRONE_SPEED = 3.0
+const BASE_SPAWN_INTERVAL = 115
+
+let nextPipeFrame = BASE_SPAWN_INTERVAL
+
+function reset() {
+  py = H * 0.45
+  vy = 0
+  held = false
+  pipes = []
+  lasers = []
+  drones = []
+  particles = []
+  frame = 0
+  nextPipeFrame = BASE_SPAWN_INTERVAL
+  score.value = 0
+  combo.value = 1
+}
+
+function startGame() {
+  soundFx.playClick()
+  initCanvas()
+  reset()
+  phase.value = 'playing'
+  if (!rafId) loop()
+}
+
+function onTap(e) {
+  if (phase.value !== 'playing') return
+  vy = -5.6
+  shootLaser()
+}
+
+function shootLaser() {
+  soundFx.playLaser()
+  const speedMult = 1 + Math.min(1.2, frame / 18000)
+  lasers.push({
+    x: W * 0.22 + 24,
+    y: py + 10,
+    vx: 8.5 + speedMult * 1.5
+  })
+}
+
+function onKeyDown(e) {
+  if (e.code === 'Space') {
+    e.preventDefault()
+    if (phase.value === 'playing') {
+      vy = -5.6
+      shootLaser()
+    } else if (phase.value !== 'playing') {
+      startGame()
+    }
+  } else if (e.code === 'KeyP') {
+    paused = !paused
+  }
+}
+
+function onKeyUp(e) {
+  if (e.code === 'Space') held = false
+}
+
 function loop() {
   rafId = requestAnimationFrame(loop)
-  if (paused || phase.value !== 'playing') { draw(); return }
+  if (paused || phase.value !== 'playing') {
+    draw()
+    return
+  }
 
   frame++
 
+  // Progressive slow speed scaling (gentle slope over extended survival time)
+  const speedMult = 1 + Math.min(1.2, frame / 18000)
+  const currentPipeSpeed = BASE_PIPE_SPEED * speedMult
+  const currentDroneSpeed = BASE_DRONE_SPEED * speedMult
+
   // Physics
-  vy += GRAVITY
-  if (held) vy += HOLD_LIFT
-  if (vy > TERMINAL_VEL) vy = TERMINAL_VEL  // cap fall speed
+  vy += 0.24
+  if (vy > 7.5) vy = 7.5
   py += vy
 
-  // Spawn pipe
-  pTimer++
-  if (pTimer >= PIPE_EVERY) {
-    pTimer = 0
-    const minT = 36, maxT = H - GH - PIPE_GAP - 36
-    pipes.push({ x: W + 8, tH: minT + Math.random() * (maxT - minT), done: false })
+  // Spawn obstacles with spatial compensation
+  if (frame >= nextPipeFrame) {
+    const gap = Math.max(120, 138 - Math.min(16, Math.floor(frame / 6000) * 4))
+    const minH = 40
+    const maxH = H - gap - 60
+    const topH = minH + Math.random() * (maxH - minH)
+    pipes.push({ x: W + 10, topH, gap, passed: false })
+
+    // Spawn rogue drone occasionally
+    if (Math.random() > 0.35) {
+      drones.push({
+        x: W + 30,
+        y: topH + gap / 2 + (Math.random() - 0.5) * 40,
+        vx: currentDroneSpeed,
+        alive: true
+      })
+    }
+
+    const currentInterval = Math.max(68, Math.round(BASE_SPAWN_INTERVAL / speedMult))
+    nextPipeFrame = frame + currentInterval
   }
 
-  // Update pipes
-  const s = spd()
-  for (let i = pipes.length - 1; i >= 0; i--) {
-    pipes[i].x -= s
-    if (pipes[i].x + PIPE_W < 0) { pipes.splice(i, 1); continue }
+  // Update Lasers
+  for (let i = lasers.length - 1; i >= 0; i--) {
+    lasers[i].x += lasers[i].vx
+    if (lasers[i].x > W + 20) {
+      lasers.splice(i, 1)
+      continue
+    }
 
-    // Score gate
-    if (!pipes[i].done && pipes[i].x + PIPE_W < px()) {
-      pipes[i].done = true
-      score.value++
+    // Check drone hits
+    for (let j = drones.length - 1; j >= 0; j--) {
+      const d = drones[j]
+      if (d.alive && Math.hypot(lasers[i]?.x - d.x, lasers[i]?.y - d.y) < 20) {
+        d.alive = false
+        soundFx.playExplosion()
+        score.value += 3 * combo.value
+        combo.value++
+        createSparks(d.x, d.y, '#f59e0b', 16)
+        lasers.splice(i, 1)
+        break
+      }
+    }
+  }
+
+  // Update Drones
+  for (let i = drones.length - 1; i >= 0; i--) {
+    drones[i].x -= drones[i].vx
+    if (drones[i].x < -30) {
+      drones.splice(i, 1)
+      continue
+    }
+    // Ship collision
+    if (drones[i].alive && Math.hypot(W * 0.22 - drones[i].x, py - drones[i].y) < 22) {
+      doCrash()
+      return
+    }
+  }
+
+  // Update Pipes
+  for (let i = pipes.length - 1; i >= 0; i--) {
+    const p = pipes[i]
+    p.x -= currentPipeSpeed
+
+    if (!p.passed && p.x < W * 0.22) {
+      p.passed = true
+      score.value += 1 * combo.value
       if (score.value > playerBest.value) playerBest.value = score.value
     }
 
-    // Collision (shrunk hitbox for fairness)
-    const hb = 6
-    const lx = px() + hb, rx2 = px() + PW - hb
-    const ty = py + hb,  by = py + PH - hb
-    if (rx2 > pipes[i].x + hb && lx < pipes[i].x + PIPE_W - hb) {
-      if (ty < pipes[i].tH || by > pipes[i].tH + PIPE_GAP) { doCrash(); return }
+    if (p.x < -60) {
+      pipes.splice(i, 1)
+      continue
+    }
+
+    // Collision box
+    const px = W * 0.22
+    const pw = 34
+    const ph = 20
+    if (px + pw > p.x && px < p.x + 50) {
+      if (py < p.topH || py + ph > p.topH + p.gap) {
+        doCrash()
+        return
+      }
     }
   }
 
-  // Boundary
-  if (py + PH >= H - GH || py <= 0) { doCrash(); return }
+  // Ground / Sky Collision
+  if (py <= 0 || py + 20 >= H) {
+    doCrash()
+    return
+  }
 
-  // Clouds
-  clouds.forEach(c => { c.x -= c.s; if (c.x + c.w < 0) { c.x = W + 20; c.y = 20 + Math.random() * (H * 0.38) } })
-
-  // Sparks age
-  sparks = sparks.filter(s => { s.life--; s.x += s.vx; s.y += s.vy; s.vy += 0.22; return s.life > 0 })
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const pt = particles[i]
+    pt.x += pt.vx
+    pt.y += pt.vy
+    pt.life--
+    if (pt.life <= 0) particles.splice(i, 1)
+  }
 
   draw()
 }
 
-let paused = false
-
-function doCrash() {
-  // Burst of sparks
-  for (let i = 0; i < 26; i++) {
-    const a = Math.random() * Math.PI * 2, sp = 1.5 + Math.random() * 4.5
-    sparks.push({
-      x: px() + PW / 2, y: py + PH / 2,
-      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 1.8,
-      life: 30 + Math.floor(Math.random() * 18),
-      c: ['#ff5f57','#febc2e','#58a6ff','#fff','#3fb950'][Math.floor(Math.random() * 5)],
+function createSparks(x, y, color, count = 12) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2
+    const spd = Math.random() * 4 + 1
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      life: 20 + Math.random() * 15,
+      color: color || '#00f2fe'
     })
   }
-  cancelAnimationFrame(rafId); rafId = null
-
-  // Animate sparks then show overlay
-  let t = 0
-  const sl = () => {
-    draw()
-    sparks.forEach(s => { s.life--; s.x += s.vx; s.y += s.vy; s.vy += 0.22 })
-    sparks = sparks.filter(s => s.life > 0)
-    if (++t < 38) requestAnimationFrame(sl)
-    else phase.value = 'dead'
-  }
-  requestAnimationFrame(sl)
 }
 
-// ─── DRAW ──────────────────────────────────────────────────────
+function doCrash() {
+  soundFx.playExplosion()
+  createSparks(W * 0.22, py, '#f43f5e', 30)
+  cancelAnimationFrame(rafId)
+  rafId = null
+  setTimeout(() => {
+    phase.value = 'dead'
+  }, 400)
+}
+
 function draw() {
   if (!ctx) return
   ctx.clearRect(0, 0, W, H)
 
-  // Sky
-  const sk = ctx.createLinearGradient(0, 0, 0, H)
-  sk.addColorStop(0,   '#06080e')
-  sk.addColorStop(0.7, '#0d1220')
-  sk.addColorStop(1,   '#111928')
-  ctx.fillStyle = sk; ctx.fillRect(0, 0, W, H)
+  // Background Nebula
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#06090e')
+  bg.addColorStop(1, '#0c1420')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
 
-  // Stars (deterministic so they don't flicker)
-  ctx.fillStyle = 'rgba(200,220,255,0.45)'
-  for (let i = 0; i < 55; i++) {
-    ctx.fillRect((i * 137.5 + frame * 0.04) % W, (i * 79.3) % (H - GH - 10), 1, 1)
-  }
-
-  // Clouds
-  clouds.forEach(c => {
-    ctx.fillStyle = `rgba(88,166,255,${c.a})`
+  // Cyber Grid Lines (scrolling with current speed)
+  ctx.strokeStyle = 'rgba(0, 242, 254, 0.06)'
+  ctx.lineWidth = 1
+  const speedMult = 1 + Math.min(1.2, frame / 18000)
+  const gridOffset = (frame * BASE_PIPE_SPEED * speedMult * 0.4) % 40
+  for (let x = -gridOffset; x < W + 40; x += 40) {
     ctx.beginPath()
-    ctx.ellipse(c.x + c.w * 0.3, c.y, c.w * 0.28, 13, 0, 0, Math.PI * 2)
-    ctx.ellipse(c.x + c.w * 0.58, c.y - 5, c.w * 0.22, 10, 0, 0, Math.PI * 2)
-    ctx.ellipse(c.x + c.w * 0.72, c.y + 2, c.w * 0.18, 9, 0, 0, Math.PI * 2)
-    ctx.fill()
-  })
+    ctx.moveTo(x, 0)
+    ctx.lineTo(x, H)
+    ctx.stroke()
+  }
 
-  // Pipes
+  // Pipes / Neon Towers
   pipes.forEach(p => {
-    // Pipe colour gradient (left to right)
-    const pg = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0)
-    pg.addColorStop(0,   '#162616'); pg.addColorStop(0.4, '#234823'); pg.addColorStop(1, '#0e1a0e')
+    ctx.fillStyle = '#121924'
+    ctx.strokeStyle = '#00f2fe'
+    ctx.lineWidth = 2
 
-    // Top pipe
-    ctx.fillStyle = pg; ctx.fillRect(p.x, 0, PIPE_W, p.tH)
-    ctx.fillStyle = '#3fb950'; ctx.fillRect(p.x - 5, p.tH - 14, PIPE_W + 10, 14)
-    ctx.fillStyle = 'rgba(63,185,80,0.4)'; ctx.fillRect(p.x, 0, 3, p.tH - 14)
-    ctx.fillStyle = 'rgba(63,185,80,0.15)'; ctx.fillRect(p.x + PIPE_W - 3, 0, 3, p.tH - 14)
+    // Top Tower
+    ctx.fillRect(p.x, 0, 50, p.topH)
+    ctx.strokeRect(p.x, 0, 50, p.topH)
 
-    // Bottom pipe
-    const bT = p.tH + PIPE_GAP
-    ctx.fillStyle = pg; ctx.fillRect(p.x, bT, PIPE_W, H - GH - bT)
-    ctx.fillStyle = '#3fb950'; ctx.fillRect(p.x - 5, bT, PIPE_W + 10, 14)
-    ctx.fillStyle = 'rgba(63,185,80,0.4)'; ctx.fillRect(p.x, bT + 14, 3, H - GH - bT - 14)
-    ctx.fillStyle = 'rgba(63,185,80,0.15)'; ctx.fillRect(p.x + PIPE_W - 3, bT + 14, 3, H - GH - bT - 14)
+    // Bottom Tower
+    const botY = p.topH + p.gap
+    const botH = H - botY
+    ctx.fillRect(p.x, botY, 50, botH)
+    ctx.strokeRect(p.x, botY, 50, botH)
   })
 
-  // Ground
-  const gg = ctx.createLinearGradient(0, H - GH, 0, H)
-  gg.addColorStop(0, '#1a2a12'); gg.addColorStop(1, '#0e1a08')
-  ctx.fillStyle = gg; ctx.fillRect(0, H - GH, W, GH)
-  ctx.fillStyle = '#3fb950'; ctx.fillRect(0, H - GH, W, 3)
-  ctx.fillStyle = 'rgba(63,185,80,0.18)'; ctx.fillRect(0, H - GH + 3, W, 4)
-
-  // Ground stripes scrolling
-  ctx.strokeStyle = 'rgba(63,185,80,0.08)'; ctx.lineWidth = 1
-  const go = (frame * 0.9) % 40
-  for (let gx = -go; gx < W; gx += 40) {
-    ctx.beginPath(); ctx.moveTo(gx, H - GH + 3); ctx.lineTo(gx, H); ctx.stroke()
-  }
-
-  // Plane (only when alive)
-  if (phase.value === 'playing') drawPlane(px(), py, vy)
-
-  // Mid-game score watermark
-  if (phase.value === 'playing') {
-    ctx.fillStyle = 'rgba(255,255,255,0.09)'
-    ctx.font = `bold ${Math.min(W * 0.13, 50)}px Orbitron, monospace`
-    ctx.textAlign = 'center'
-    ctx.fillText(score.value, W / 2, 54)
-    ctx.textAlign = 'left'
-  }
-
-  // Sparks
-  sparks.forEach(s => {
-    ctx.globalAlpha = Math.max(0, s.life / 48)
-    ctx.fillStyle = s.c
-    ctx.fillRect(s.x - 2.5, s.y - 2.5, 5, 5)
+  // Drones
+  drones.forEach(d => {
+    if (!d.alive) return
+    ctx.fillStyle = '#f59e0b'
+    ctx.beginPath()
+    ctx.arc(d.x, d.y, 8, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = '#fff'
+    ctx.stroke()
   })
-  ctx.globalAlpha = 1
 
-  // Pause banner
-  if (paused && phase.value === 'playing') {
-    ctx.fillStyle = 'rgba(7,10,14,0.7)'; ctx.fillRect(0, 0, W, H)
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Orbitron, monospace'
-    ctx.textAlign = 'center'; ctx.fillText('PAUSED — P to resume', W / 2, H / 2)
-    ctx.textAlign = 'left'
-  }
+  // Lasers
+  lasers.forEach(l => {
+    ctx.fillStyle = '#00f2fe'
+    ctx.shadowColor = '#00f2fe'
+    ctx.shadowBlur = 10
+    ctx.fillRect(l.x, l.y, 14, 3)
+    ctx.shadowBlur = 0
+  })
+
+  // Player Ship
+  const px = W * 0.22
+  ctx.fillStyle = '#f8fafc'
+  ctx.shadowColor = '#00f2fe'
+  ctx.shadowBlur = 12
+  ctx.beginPath()
+  ctx.moveTo(px + 24, py + 10)
+  ctx.lineTo(px, py)
+  ctx.lineTo(px + 6, py + 10)
+  ctx.lineTo(px, py + 20)
+  ctx.closePath()
+  ctx.fill()
+  ctx.shadowBlur = 0
+
+  // Particles
+  particles.forEach(pt => {
+    ctx.fillStyle = pt.color
+    ctx.fillRect(pt.x, pt.y, 2, 2)
+  })
 }
-
-function drawPlane(x, y, vel) {
-  ctx.save()
-  const tilt = Math.max(-0.42, Math.min(0.52, vel * 0.044))
-  ctx.translate(x + PW / 2, y + PH / 2)
-  ctx.rotate(tilt)
-
-  // Engine trail
-  const tr = ctx.createLinearGradient(-PW / 2 - 22, 0, -PW / 2, 0)
-  tr.addColorStop(0, 'rgba(88,166,255,0)'); tr.addColorStop(1, 'rgba(88,166,255,0.3)')
-  ctx.fillStyle = tr; ctx.fillRect(-PW / 2 - 24, -4, 24, 8)
-
-  // Fuselage
-  ctx.fillStyle = '#dce8f8'
-  ctx.beginPath(); ctx.ellipse(0, 0, PW / 2, PH / 2 - 3, 0, 0, Math.PI * 2); ctx.fill()
-
-  // Cockpit
-  ctx.fillStyle = '#58a6ff'
-  ctx.beginPath(); ctx.ellipse(PW / 2 - 10, -1, 8, 5, 0, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = 'rgba(255,255,255,0.5)'
-  ctx.beginPath(); ctx.ellipse(PW / 2 - 11, -3, 3, 1.8, -0.3, 0, Math.PI * 2); ctx.fill()
-
-  // Top wing
-  ctx.fillStyle = '#b8ccec'
-  ctx.beginPath(); ctx.moveTo(-2, -3); ctx.lineTo(10, -17); ctx.lineTo(16, -14); ctx.lineTo(6, -3); ctx.closePath(); ctx.fill()
-
-  // Bottom wing
-  ctx.fillStyle = '#a0b8d8'
-  ctx.beginPath(); ctx.moveTo(-2, 3); ctx.lineTo(6, 14); ctx.lineTo(12, 12); ctx.lineTo(6, 3); ctx.closePath(); ctx.fill()
-
-  // Tail fin
-  ctx.fillStyle = '#b8ccec'
-  ctx.beginPath(); ctx.moveTo(-PW / 2 + 4, -1); ctx.lineTo(-PW / 2 + 4, -12); ctx.lineTo(-PW / 2 + 13, -3); ctx.closePath(); ctx.fill()
-
-  // Engine pod
-  ctx.fillStyle = '#2c3440'
-  ctx.beginPath(); ctx.ellipse(-PW / 2 + 4, 0, 7, 4.5, 0, 0, Math.PI * 2); ctx.fill()
-
-  // Engine glow
-  const eg = ctx.createRadialGradient(-PW / 2 + 4, 0, 0, -PW / 2 + 4, 0, 9)
-  eg.addColorStop(0, 'rgba(88,166,255,0.8)'); eg.addColorStop(1, 'rgba(88,166,255,0)')
-  ctx.fillStyle = eg
-  ctx.beginPath(); ctx.ellipse(-PW / 2 + 4, 0, 9, 7, 0, 0, Math.PI * 2); ctx.fill()
-
-  ctx.restore()
-}
-
-// ─── INPUT ─────────────────────────────────────────────────────
-function onTap() {
-  if (phase.value === 'playing') { vy = FLAP_VEL; held = true; setTimeout(() => { held = false }, 140) }
-}
-
-function onKD(e) {
-  if ((e.code === 'Space' || e.code === 'ArrowUp') && phase.value === 'playing') {
-    e.preventDefault(); vy = FLAP_VEL; held = true
-  }
-  if (e.code === 'KeyP' && phase.value === 'playing') paused = !paused
-}
-function onKU(e) {
-  if (e.code === 'Space' || e.code === 'ArrowUp') held = false
-}
-
-// ─── START ─────────────────────────────────────────────────────
-function startGame() {
-  const canvas = canvasEl.value, wrap = wrapEl.value
-  if (!canvas || !wrap) return
-  W = canvas.width  = wrap.clientWidth
-  H = canvas.height = wrap.clientHeight
-  ctx = canvas.getContext('2d')
-  reset()
-  phase.value = 'playing'
-  if (rafId) cancelAnimationFrame(rafId)
-  loop()
-}
-
-// ─── LIFECYCLE ─────────────────────────────────────────────────
-watch(() => props.active, a => { if (!a && rafId) { cancelAnimationFrame(rafId); rafId = null } })
-
-document.addEventListener('keydown', onKD)
-document.addEventListener('keyup',   onKU)
-onUnmounted(() => {
-  if (rafId) cancelAnimationFrame(rafId)
-  document.removeEventListener('keydown', onKD)
-  document.removeEventListener('keyup',   onKU)
-})
 </script>
 
 <style scoped>
-:root { --cp-muted: #8b949e; }
-
 .game-body {
-  display: flex; flex-direction: column; height: 100%;
-  background: #06080e; font-family: 'Rajdhani', sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  background: #06090e;
+  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  color: var(--text-0);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.cp-wrap {
-  flex: 1; position: relative; overflow: hidden; cursor: pointer;
-}
-
-.cp-canvas {
-  display: block; width: 100%; height: 100%;
-  touch-action: none;
-}
-
-.cp-hint {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: #4a5568;
-  text-align: center; padding: 6px 0;
+.game-challenge-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
+.gcb-trophy { font-size: 20px; }
+.gcb-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+.gcb-sub {
+  font-size: 10px;
+  color: var(--text-1);
+}
+.gcb-sub strong { color: var(--amber); }
+
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-glass-card);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  flex-shrink: 0;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+}
+.hud-center { align-items: center; }
+.hud-right { align-items: flex-end; }
+
+.hud-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-2);
+}
+
+.hud-val {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-0);
+}
+.hud-combo { color: var(--green); }
+.hud-rival { color: var(--amber); }
+.beat-kris { color: var(--amber); text-shadow: 0 0 10px var(--amber); }
+
+.cp-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cp-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .game-overlay {
-  position: absolute; inset: 0;
-  background: rgba(4,6,14,0.9);
-  display: flex; align-items: center; justify-content: center;
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 9, 14, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 10;
 }
 
 .go-inner {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 11px;
-  text-align: center; padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 24px;
 }
 
 .go-plane-anim {
-  font-size: 42px; line-height: 1;
-  animation: planeBob 1.8s ease-in-out infinite alternate;
-  filter: drop-shadow(0 0 14px rgba(88,166,255,0.55));
-}
-@keyframes planeBob {
-  from { transform: translateY(-5px) rotate(-5deg); }
-  to   { transform: translateY(5px)  rotate(5deg); }
+  font-size: 36px;
+  color: #ffffff;
+  animation: pulse 1s infinite alternate;
 }
 
 .go-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(16px, 4vw, 28px); font-weight: 900;
-  letter-spacing: 5px; color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #ffffff;
 }
 
-.go-tagline { font-size: 12px; color: #8b949e; letter-spacing: 0.5px; }
-.go-record { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: #8b949e; }
-.go-record strong { color: #ffd700; }
+.go-tagline {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
 
-.go-scores { display: flex; gap: 28px; margin: 2px 0; }
-.go-score-col { text-align: center; }
-.go-score-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; color: #4a5568; letter-spacing: 2px; margin-bottom: 3px;
+.go-record {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
 }
-.go-score-val {
-  font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 700; color: #fff;
-}
+.go-record strong { color: var(--amber); }
 
 .go-btn {
-  margin-top: 4px; padding: 11px 34px;
-  font-family: 'Orbitron', sans-serif; font-size: 12px;
-  font-weight: 700; letter-spacing: 4px;
-  background: #58a6ff; color: #000; border: none; border-radius: 6px;
-  cursor: pointer; transition: all 0.18s ease;
-  box-shadow: 0 0 22px rgba(88,166,255,0.35);
+  padding: 12px 32px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--accent-glow);
+  transition: all 0.15s;
 }
-.go-btn:hover { background: #7bbcff; transform: scale(1.04); }
+.go-btn:hover {
+  background: #7bbcff;
+  transform: scale(1.05);
+}
 
 .go-hint {
-  font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #4a5568;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.go-scores {
+  display: flex;
+  gap: 20px;
+  background: rgba(14, 20, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+
+.go-score-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.go-score-label {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.go-score-val {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.cp-hint {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 6px;
+  font-size: 9px;
+  color: var(--text-2);
+  background: var(--bg-1);
+  border-top: 1px solid var(--border);
 }
 </style>

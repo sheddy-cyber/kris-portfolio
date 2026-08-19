@@ -1,51 +1,88 @@
-# Kris Shedrach — Portfolio OS
-### Built with Vue 3 + Vite
+# Kris Shedrach — Portfolio OS (v2.4.0 Titanium Edition)
+### Built with Vue 3 (Composition API) + Vite 5 + Web Audio DSP
 
-A fake operating system personal portfolio website for Kris Shedrach.
+A next-generation interactive operating system personal portfolio workstation for **Kris Shedrach** — Full-Stack Web Architect and Mobile Engineer.
 
 ---
 
-## 🚀 How to Run
+## ⚡ Key Upgrades & Architecture
+
+1. **Titanium Glass & Cyber Aesthetic**:
+   - Modern glassmorphic surfaces (`backdrop-filter: blur(24px) saturate(180%)`), glowing focused borders, and dynamic ambient background canvas (Interactive Constellation Particles / Cyber 3D Grid / Phosphor Matrix).
+   - **5 Swappable System Themes**:
+     - `Cyber Cyan` (Default)
+     - `Neo Tokyo` (Cyberpunk Magenta & Violet)
+     - `Matrix` (Phosphor Terminal Green)
+     - `Obsidian Gold` (Solar Flare / Luxury Amber)
+     - `Titanium` (Monochromatic Stealth Silver)
+
+2. **Web Audio Sound Synthesis Engine (`src/audio/soundFx.js`)**:
+   - Zero external audio assets; synthesizes real-time futuristic UI sound effects using the Web Audio API (window sweeps, mechanical keystrokes, laser blasts, explosion rumble, and system boot chimes).
+   - Master volume slider and instant sound toggle in Quick Settings.
+
+3. **Procedural Synthwave Radio (`src/audio/synthMusic.js` & `synthwave.fm`)**:
+   - Procedural synthwave music generator featuring 3 original chill ambient tracks (*Quantum Drift*, *Neon Horizon*, *Obsidian Protocol*) with a live 24-band FFT audio spectrum visualizer.
+
+4. **Hacker CLI Terminal (`terminal.sh`)**:
+   - Interactive shell with autocomplete (Tab), history navigation (Arrow Up/Down), keystroke sounds, and commands:
+     - `help`, `about`, `skills`, `projects`, `neofetch`, `theme <name>`, `music <play|stop|next>`, `matrix`, `ping <host>`, `contact`, `hire`, `clear`, `sudo rm -rf /`.
+
+5. **Live System Monitor & Task Manager (`sysmon.exe`)**:
+   - Real-time CPU performance wave graph on HTML5 Canvas, RAM gauges, system uptime timer, and active process controller with "Focus" and "Kill" actions.
+
+6. **Interactive Project Case Studies (`works.dir`)**:
+   - Deep-dive case studies with architecture breakdown, key metrics, engineering challenges, stack pills, live demo links, and search & category filtering.
+
+7. **Quantum Pilot Laser Game (`game.exe`)**:
+   - Thruster flight mechanics, laser blaster cannons, multiplier streak combos, particle explosions, and local storage high score leaderboard.
+
+8. **Encrypted Message Dispatcher (`contact.msg`)**:
+   - Simulated RSA-4096 PGP encryption stream on message dispatch, one-click email copying, and social coordinates.
+
+9. **CyberPhone OS Mobile Shell (`src/components/MobileShell.vue`)**:
+   - Dedicated mobile cyberpunk interface with top Dynamic Island notification notch, bottom glass dock, and touch-optimized navigation.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-You need **Node.js** installed (v18 or later recommended).
-Download it from: https://nodejs.org
+- **Node.js** (v18 or later recommended)
 
-### Step 1 — Install dependencies
-Open a terminal inside this folder and run:
-
+### Step 1 — Install Dependencies
 ```bash
 npm install
 ```
 
-This installs Vue 3 and Vite (only takes a few seconds).
-
-### Step 2 — Start the dev server
-
+### Step 2 — Start Development Server
 ```bash
 npm run dev
 ```
-
-Then open your browser to: **http://localhost:5173**
+Open **http://localhost:5173** in your browser.
 
 ---
 
-## 🏗️ Build for Production
+## 🏗️ Production Build
 
 ```bash
 npm run build
 ```
+Outputs optimized production assets in `dist/`. Deploy to **Vercel**, **Netlify**, **Cloudflare Pages**, or **GitHub Pages**.
 
-This outputs a `dist/` folder. Deploy it to **Vercel**, **Netlify**, or any static host.
+---
 
-### Deploy to Vercel (fastest)
-```bash
-npm install -g vercel
-vercel --prod
-```
+## ⌨️ Global Keyboard Shortcuts
 
-### Deploy to Netlify
-Drag and drop the `dist/` folder into https://app.netlify.com/drop
+| Shortcut | Action |
+|----------|--------|
+| `Alt + A` | Open About Me (`about.exe`) |
+| `Alt + W` | Open Works & Portfolio (`works.dir`) |
+| `Alt + T` | Open Hacker Terminal (`terminal.sh`) |
+| `Alt + S` | Open System Monitor (`sysmon.exe`) |
+| `Alt + M` | Open Synthwave Radio (`radio.app`) |
+| `Alt + G` | Open Quantum Pilot Game (`game.exe`) |
+| `Alt + C` | Open Encrypted Contact (`contact.msg`) |
+| `Escape`  | Close menus, modals, and flyouts |
 
 ---
 
@@ -53,86 +90,34 @@ Drag and drop the `dist/` folder into https://app.netlify.com/drop
 
 ```
 kris-portfolio/
-├── index.html                  ← HTML entry point
-├── vite.config.js              ← Vite config
-├── package.json                ← Dependencies
+├── index.html                   ← Enhanced typography (Orbitron, JetBrains Mono, Syne)
+├── vite.config.js               ← Vite configuration
+├── package.json
 └── src/
-    ├── main.js                 ← Vue app mount
-    ├── App.vue                 ← Main OS shell (boot, desktop, taskbar, windows)
+    ├── main.js                  ← Vue entrypoint
+    ├── App.vue                  ← Master OS Desktop shell & Aero Snap manager
+    ├── audio/
+    │   ├── soundFx.js           ← Web Audio synthesized UI sound effects
+    │   └── synthMusic.js        ← Procedural synthwave audio engine & FFT analyzer
     ├── assets/
-    │   └── global.css          ← All styles
+    │   ├── themes.css           ← 5 distinct theme variable definitions
+    │   └── global.css           ← Titanium glassmorphism & OS styles
     └── components/
-        ├── OsWindow.vue        ← Draggable/resizable window component
-        ├── AboutApp.vue        ← About Me window
-        ├── ServicesApp.vue     ← Services window
-        ├── WorksApp.vue        ← Portfolio works grid (filterable)
-        ├── GameApp.vue         ← Space Invaders game
-        └── ContactApp.vue      ← Contact form
+        ├── CustomCursor.vue     ← Reticle crosshair cyber cursor with magnetic hover
+        ├── OsWindow.vue         ← Draggable/resizable window with Aero Snap
+        ├── QuickSettings.vue    ← Control Center (audio, themes, wallpaper modes)
+        ├── ProjectModal.vue     ← Deep-dive case study inspector
+        ├── AboutApp.vue         ← Multi-tab bio, career timeline, and skills matrix
+        ├── ServicesApp.vue      ← 3D hover cards with deliverables breakdown
+        ├── WorksApp.vue         ← Searchable portfolio with grid/list modes
+        ├── TerminalApp.vue      ← Full-featured hacker CLI terminal
+        ├── SysMonApp.vue        ← Real-time CPU wave chart & process manager
+        ├── SynthRadioApp.vue    ← Ambient radio player with audio visualizer
+        ├── GameApp.vue          ← Quantum pilot space flight game
+        ├── ContactApp.vue       ← Encrypted message console
+        └── MobileShell.vue      ← CyberPhone OS interface for mobile devices
 ```
 
 ---
 
-## ✏️ Customisation
-
-### Update your info
-- **About:** edit `src/components/AboutApp.vue` — update name, bio, skills, location
-- **Services:** edit `src/components/ServicesApp.vue` — update service cards
-- **Works:** edit `src/components/WorksApp.vue` — add/edit project cards in the `projects` array
-- **Contact:** edit `src/components/ContactApp.vue` — update email, social links
-- **Game score:** edit `src/components/GameApp.vue` — change `const KRIS_SCORE = 2847`
-
-### Replace the cartoon avatar
-Replace the inline SVG in `AboutApp.vue` and `ContactApp.vue` with an `<img>` tag:
-
-```html
-<div class="avatar-pic">
-  <img src="/your-photo.jpg" alt="Kris Shedrach" style="width:100%;height:100%;object-fit:cover;" />
-</div>
-```
-
-Put your photo in the `public/` folder and reference it as `/your-photo.jpg`.
-
-### Connect the contact form
-In `ContactApp.vue`, replace the `send()` function with a real API call:
-
-```js
-// Example using Formspree
-async function send() {
-  sending.value = true
-  await fetch('https://formspree.io/f/YOUR_ID', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form.value),
-  })
-  sending.value = false
-  sent.value = true
-}
-```
-
----
-
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Alt + A` | Open About |
-| `Alt + W` | Open Works |
-| `Alt + G` | Open Game |
-| `Escape`  | Close start menu |
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Framework | Vue 3 (Composition API) |
-| Build tool | Vite 5 |
-| Styling | CSS3 custom properties |
-| Fonts | Google Fonts (Orbitron, Rajdhani, Share Tech Mono) |
-| Game | Canvas API (vanilla JS inside Vue component) |
-| Animation | CSS animations + Canvas RAF |
-
----
-
-KRIS SHEDRACH PORTFOLIO OS © 2025
+KRIS SHEDRACH PORTFOLIO OS © 2025 // CRAFTED WITH OBSESSIVE PRECISION
