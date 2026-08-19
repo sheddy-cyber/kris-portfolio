@@ -1,5 +1,5 @@
 <template>
-  <div class="quick-settings-panel" @click.stop>
+  <div class="quick-settings-panel" :class="{ 'is-mobile-view': isMobileView }" @click.stop>
     <!-- Panel Header -->
     <div class="qs-header">
       <div class="qs-title">CONTROL CENTER</div>
@@ -90,8 +90,8 @@
       </div>
     </div>
 
-    <!-- Wallpaper Interactive Mode Selector -->
-    <div class="qs-section">
+    <!-- Wallpaper Interactive Mode Selector (Desktop Only) -->
+    <div v-if="!isMobileView" class="qs-section">
       <div class="qs-sec-label">AMBIENT BACKGROUND ENGINE</div>
       <div class="qs-wallpaper-row">
         <button
@@ -117,6 +117,7 @@ const props = defineProps({
   currentTheme: { type: String, default: 'twitter' },
   currentWallpaper: { type: String, default: 'none' },
   scanlinesEnabled: { type: Boolean, default: false },
+  isMobileView: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['select-theme', 'select-wallpaper', 'toggle-scanlines'])
@@ -188,6 +189,25 @@ function toggleFullscreen() {
   font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
   animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.quick-settings-panel.is-mobile-view {
+  position: relative;
+  inset: auto;
+  bottom: auto;
+  right: auto;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  animation: none;
+  padding: 10px 14px 10px;
+  gap: 10px;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 @keyframes slideUp {

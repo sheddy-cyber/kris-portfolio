@@ -3,8 +3,8 @@
     <!-- Terminal Header Bar -->
     <div class="term-status-line">
       <div class="term-status-left">
-        <span class="term-badge">SHELL: ZSH 5.9</span>
-        <span class="term-badge">HOST: KRIS-PORTFOLIO-OS</span>
+        <span class="term-badge term-shell-badge">ZSH 5.9</span>
+        <span class="term-badge term-host-badge">HOST: KRIS-PORTFOLIO-OS</span>
         <span class="term-badge term-green">● LIVE</span>
       </div>
       <div class="term-status-right">
@@ -407,6 +407,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   padding-bottom: 8px;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--border);
@@ -414,12 +415,22 @@ onMounted(() => {
   letter-spacing: 1px;
   color: var(--text-2);
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .term-status-left {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-shrink: 0;
+}
+
+.term-status-right {
+  margin-left: auto;
+  padding-left: 12px;
+  white-space: nowrap;
+  color: var(--accent);
+  opacity: 0.85;
 }
 
 .term-badge {
@@ -432,6 +443,19 @@ onMounted(() => {
 .term-green {
   color: var(--green);
   border-color: rgba(16, 185, 129, 0.3);
+}
+
+@media (max-width: 600px) {
+  .term-status-line {
+    gap: 8px;
+  }
+  .term-host-badge {
+    display: none;
+  }
+  .term-status-right {
+    font-size: 9.5px;
+    padding-left: 8px;
+  }
 }
 
 .term-output {

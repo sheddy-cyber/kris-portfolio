@@ -31,8 +31,12 @@
     v-if="desktopVisible && isMobile"
     :clock="clock"
     :currentTheme="currentTheme"
+    :currentWallpaper="currentWallpaper"
+    :scanlinesEnabled="scanlinesEnabled"
     :contactPrefill="contactPrefill"
     @select-theme="setTheme"
+    @select-wallpaper="setWallpaper"
+    @toggle-scanlines="scanlinesEnabled = !scanlinesEnabled"
     @notify="addNotification"
     @prefill-contact="contactPrefill = $event"
   />

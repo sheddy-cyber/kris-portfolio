@@ -3,36 +3,39 @@
     <!-- Challenge Header Banner -->
     <div class="game-challenge-banner">
       <div class="gcb-trophy">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4v4zm12 0h2a2 2 0 0 0 2-2V5h-4v4z"/><path d="M6 5h12v6a6 6 0 0 1-12 0V5z"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4v4zm12 0h2a2 2 0 0 0 2-2V5h-4v4z"/><path d="M6 5h12v6a6 6 0 0 1-12 0V5z"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
       </div>
       <div class="gcb-text">
-        <div class="gcb-title">QUANTUM PILOT // CYBER FLIGHT</div>
-        <div class="gcb-sub">Kris's Developer Record: <strong>{{ KRIS_SCORE }} PTS</strong> — Think you can beat me?</div>
+        <div class="gcb-title">QUANTUM PILOT</div>
+        <div class="gcb-sub">
+          <span class="gcb-sub-desktop">Kris's Developer Record: <strong>{{ KRIS_SCORE }} PTS</strong> — Think you can beat me?</span>
+          <span class="gcb-sub-mobile">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></span>
+        </div>
       </div>
     </div>
 
     <!-- Live Game HUD -->
     <div class="game-hud">
       <div class="hud-item">
-        <div class="hud-label">YOUR SCORE</div>
+        <div class="hud-label"><span class="desktop-only">YOUR </span>SCORE</div>
         <div class="hud-val" :class="{ 'beat-kris': score > KRIS_SCORE }">{{ score }}</div>
       </div>
       <div class="hud-item hud-center">
-        <div class="hud-label">COMBO MULTIPLIER</div>
+        <div class="hud-label">COMBO<span class="desktop-only"> MULTIPLIER</span></div>
         <div class="hud-val hud-combo">{{ combo }}x</div>
       </div>
-      <div class="hud-item hud-center">
+      <div class="hud-item hud-center hud-item-rival">
         <div class="hud-label">KRIS'S RECORD</div>
         <div class="hud-val hud-rival">{{ KRIS_SCORE }}</div>
       </div>
       <div class="hud-item hud-right">
-        <div class="hud-label">YOUR ALL-TIME BEST</div>
+        <div class="hud-label"><span class="desktop-only">YOUR </span>BEST</div>
         <div class="hud-val" :style="{ color: playerBest > KRIS_SCORE ? 'var(--amber)' : 'var(--text-0)' }">{{ playerBest }}</div>
       </div>
     </div>
 
     <!-- Canvas Play Area -->
-    <div class="cp-wrap" ref="wrapEl" @mousedown="onTap" @touchstart.prevent="onTap">
+    <div class="cp-wrap" ref="wrapEl" @mousedown="onAreaClick" @touchstart="onAreaTouch">
       <canvas ref="canvasEl" class="cp-canvas"></canvas>
 
       <!-- Overlay States (Start / Game Over) -->
@@ -44,8 +47,8 @@
             </div>
             <div class="go-title">QUANTUM PILOT</div>
             <div class="go-tagline">Click/Tap to Fly & Blast Lasers · Dodge Cyber Towers</div>
-            <div class="go-record">TARGET RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></div>
-            <button class="go-btn" @click.stop="startGame">▶ ENGAGE FLIGHT</button>
+            <div class="go-record">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></div>
+            <button class="go-btn" @click.stop="startGame" @touchend.stop.prevent="startGame">▶ ENGAGE FLIGHT</button>
             <div class="go-hint">Left-Click/Tap = Thruster & Fire &nbsp;·&nbsp; Spacebar = Fire Laser &nbsp;·&nbsp; P = Pause</div>
           </template>
 
@@ -77,7 +80,7 @@
               </div>
             </div>
 
-            <button class="go-btn" @click.stop="startGame">▶ RESTART MISSION</button>
+            <button class="go-btn" @click.stop="startGame" @touchend.stop.prevent="startGame">▶ RESTART MISSION</button>
           </template>
         </div>
       </div>
@@ -93,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { soundFx } from '../audio/soundFx'
 
 const props = defineProps({
@@ -124,29 +127,48 @@ onMounted(() => {
 
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('keyup', onKeyUp)
+  window.addEventListener('resize', onResize)
 
-  initCanvas()
+  nextTick(() => {
+    initCanvas(true)
+  })
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('keyup', onKeyUp)
+  window.removeEventListener('resize', onResize)
   if (rafId) cancelAnimationFrame(rafId)
+})
+
+function onResize() {
+  initCanvas(false)
+}
+
+watch(() => props.active, val => {
+  if (val) {
+    nextTick(() => {
+      initCanvas(false)
+    })
+  }
 })
 
 watch(playerBest, val => {
   try { localStorage.setItem(LS_KEY, String(val)) } catch (_) {}
 })
 
-function initCanvas() {
+function initCanvas(isGameReset = false) {
   if (!canvasEl.value || !wrapEl.value) return
-  W = wrapEl.value.clientWidth || 580
-  H = wrapEl.value.clientHeight || 340
-  canvasEl.value.width = W
-  canvasEl.value.height = H
+  const newW = wrapEl.value.clientWidth || 580
+  const newH = wrapEl.value.clientHeight || 340
+  if (newW === 0 || newH === 0) return
+  W = canvasEl.value.width = newW
+  H = canvasEl.value.height = newH
   ctx = canvasEl.value.getContext('2d')
-  reset()
-  draw()
+  if (isGameReset || phase.value !== 'playing') {
+    reset()
+    draw()
+  }
 }
 
 const BASE_PIPE_SPEED = 2.4
@@ -156,7 +178,7 @@ const BASE_SPAWN_INTERVAL = 115
 let nextPipeFrame = BASE_SPAWN_INTERVAL
 
 function reset() {
-  py = H * 0.45
+  py = (H || 340) * 0.45
   vy = 0
   held = false
   pipes = []
@@ -171,14 +193,24 @@ function reset() {
 
 function startGame() {
   soundFx.playClick()
-  initCanvas()
+  initCanvas(true)
   reset()
   phase.value = 'playing'
   if (!rafId) loop()
 }
 
-function onTap(e) {
+function onAreaClick(e) {
   if (phase.value !== 'playing') return
+  onFlap()
+}
+
+function onAreaTouch(e) {
+  if (phase.value !== 'playing') return
+  if (e.cancelable) e.preventDefault()
+  onFlap()
+}
+
+function onFlap() {
   vy = -5.6
   shootLaser()
 }
@@ -282,10 +314,13 @@ function loop() {
       drones.splice(i, 1)
       continue
     }
-    // Ship collision
-    if (drones[i].alive && Math.hypot(W * 0.22 - drones[i].x, py - drones[i].y) < 22) {
-      doCrash()
-      return
+    // Ship touching the ball collects/destroys it safely with bonus points instead of ending the game
+    if (drones[i].alive && Math.hypot(W * 0.22 - drones[i].x, py - drones[i].y) < 24) {
+      drones[i].alive = false
+      soundFx.playExplosion()
+      score.value += 2 * combo.value
+      combo.value++
+      createSparks(drones[i].x, drones[i].y, '#f59e0b', 14)
     }
   }
 
@@ -630,5 +665,89 @@ function draw() {
   color: var(--text-2);
   background: var(--bg-1);
   border-top: 1px solid var(--border);
+}
+
+.gcb-sub-mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .game-challenge-banner {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  .gcb-title {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .gcb-sub-desktop {
+    display: none;
+  }
+  .gcb-sub-mobile {
+    display: inline;
+    font-size: 9px;
+  }
+
+  .game-hud {
+    padding: 6px 12px;
+  }
+  .hud-item-rival {
+    display: none; /* Avoid duplication with top challenge target */
+  }
+  .hud-val {
+    font-size: 13px;
+  }
+  .hud-label {
+    font-size: 7.5px;
+  }
+  .desktop-only {
+    display: none;
+  }
+
+  .go-inner {
+    padding: 16px;
+    gap: 8px;
+  }
+  .go-plane-anim {
+    font-size: 24px;
+  }
+  .go-plane-anim svg {
+    width: 26px;
+    height: 26px;
+  }
+  .go-title {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+  .go-tagline {
+    font-size: 10.5px;
+    max-width: 270px;
+  }
+  .go-record {
+    font-size: 10px;
+  }
+  .go-btn {
+    padding: 10px 24px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+  .go-hint {
+    display: none; /* Suppress keyboard instructions on mobile */
+  }
+
+  .go-scores {
+    gap: 12px;
+    padding: 8px 14px;
+  }
+  .go-score-label {
+    font-size: 7px;
+  }
+  .go-score-val {
+    font-size: 14px;
+  }
+
+  .cp-hint {
+    display: none; /* Maximize vertical canvas height for mobile gaming */
+  }
 }
 </style>

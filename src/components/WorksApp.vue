@@ -964,4 +964,10 @@ const filteredProjects = computed(() => {
   border-color: var(--accent);
   color: var(--text-0);
 }
+
+@media (max-width: 768px) {
+  .ws-tip {
+    display: none !important;
+  }
+}
 </style>
