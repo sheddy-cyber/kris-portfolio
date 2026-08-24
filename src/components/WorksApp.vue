@@ -241,6 +241,29 @@ const projects = [
   },
   {
     cat: 'web',
+    name: 'Kyrios Family Church',
+    thumbnail: '/projects/kyrios.png',
+    liveUrl: 'https://krisshedrachportfolio.netlify.app',
+    githubUrl: 'https://github.com/sheddy-cyber/kyrios-family-church',
+    year: '2026',
+    viewBox: '0 0 280 160',
+    desc: 'Modern, responsive community web platform for Kyrios Family Church featuring sermon media streaming, event management, visitor onboarding, and online giving workflows.',
+    architecture: 'Engineered with React, TypeScript, and modern CSS/Tailwind CSS with responsive multimedia delivery pipelines. Features sermon audio/video archives with multi-filter tagging, real-time announcements marquee, interactive visit planner, direct WhatsApp concierge integration, and secure online giving workflows.',
+    metrics: [
+      { val: '100%', label: 'Mobile Responsive' },
+      { val: '<1.0s', label: 'Page Load' },
+      { val: '99.9%', label: 'Uptime SLA' }
+    ],
+    challenges: [
+      { title: 'Multimedia Sermon & Media Streaming', desc: 'Engineered dynamic video and audio sermon archives with topical filtration, optimized for high-fidelity playback across mobile networks.' },
+      { title: 'Real-Time Announcements & Event Calendar', desc: 'Built an interactive marquee ticker and event management system for weekly services, conferences, and building projects.' },
+      { title: 'Seamless Giving & Visitor Concierge', desc: 'Integrated streamlined digital giving workflows alongside instant WhatsApp concierge routing for first-time visitors and community engagement.' }
+    ],
+    stack: ['React.js', 'TypeScript', 'Tailwind CSS', 'Multimedia Player', 'WhatsApp API', 'SEO & OpenGraph', 'Netlify'],
+    svgContent: `<rect width="280" height="160" fill="#06090e"/>`
+  },
+  {
+    cat: 'web',
     name: 'The Watchtower News',
     thumbnail: '/projects/watchtower.png',
     liveUrl: 'https://thewatchtowernews.vercel.app/',
@@ -260,6 +283,31 @@ const projects = [
       { title: 'Relational Data Modeling with Prisma ORM', desc: 'Designed high-throughput PostgreSQL schemas with Prisma ORM for efficient article queries, bookmarks, and desk categorisation (World, Tech, Business, Health, Sports).' }
     ],
     stack: ['React 18', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Prisma ORM', 'JWT (Access/Refresh)', 'bcrypt', 'Nodemailer', 'Helmet & Security'],
+    svgContent: `<rect width="280" height="160" fill="#06090e"/>`
+  },
+  {
+    cat: 'web',
+    name: 'The 24 Log',
+    thumbnail: '/projects/the24log.png',
+    liveUrl: 'https://the24log.vercel.app',
+    githubUrl: 'https://github.com/sheddy-cyber/The24Log',
+    year: '2025',
+    viewBox: '0 0 280 160',
+    desc: 'Privacy-first daily time-accounting ledger and Progressive Web Application (PWA) built on a zero-dependency reactive architecture with discrete 24-hour block logging.',
+    architecture: 'Engineered with Vanilla ES6+ JavaScript, Semantic HTML5, and CSS3 on a zero-dependency architecture. Powered by a unidirectional reactive state machine with transactional localStorage synchronization, dynamic multi-personality typography engine, 3D tactile extrusion system, and a Service Worker cache invalidation pipeline for full offline data sovereignty.',
+    metrics: [
+      { val: '0 Deps', label: 'Zero Dependencies' },
+      { val: '100%', label: 'Offline Sovereignty' },
+      { val: '<0.3s', label: 'Instant Launch' }
+    ],
+    challenges: [
+      { title: 'Zero-Dependency Reactive State Architecture', desc: 'Developed a lightweight unidirectional state architecture where user actions dispatch to centralized state mutators, trigger transactional localStorage synchronization, and perform efficient DOM reconciliations with zero external libraries.' },
+      { title: 'Mobile-First Multi-Tiered Responsive Grid', desc: 'Engineered an adaptive CSS Grid layout with explicit breakpoint overrides that restructures the inline logging timeline into a comfortable 3-tier mobile stack with side-by-side tagging and action controls, eliminating horizontal overflow across all viewports.' },
+      { title: 'Tactile 3D Extrusion & Dual-Theme Contrast', desc: 'Designed a mathematical lighting and box-shadow depth-ridge extrusion system using high-luminance active base tones (terracotta, emerald, slate) to preserve physical tactile feedback across both light canvas and dark modes.' },
+      { title: 'Dynamic Typography & Voice Switcher', desc: 'Parameterized typographic scale tokens in CSS custom properties and dynamic root dataset attributes, enabling seamless multi-font class switching (Serif, Sans, Script) without layout shifts or repaints.' },
+      { title: 'PWA Lifecycle & Cache Invalidation Pipeline', desc: 'Implemented an automated cache versioning protocol in the build pipeline that synchronizes cache identifiers across the Service Worker, markup, and dist output to ensure instant asset updates.' }
+    ],
+    stack: ['Vanilla JS (ES6+)', 'Semantic HTML5', 'Modern CSS3', 'Service Worker (PWA)', 'State Machine', 'localStorage Engine', 'Dynamic Typography', '3D Tactile Design'],
     svgContent: `<rect width="280" height="160" fill="#06090e"/>`
   },
   {
