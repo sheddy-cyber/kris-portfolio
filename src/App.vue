@@ -22,6 +22,7 @@
         <div class="boot-log" ref="bootLogEl">
           <div v-for="(l, i) in bootLines" :key="i">{{ l }}</div>
         </div>
+        <button class="boot-skip-btn" @click="skipBoot">SKIP ▸</button>
       </div>
     </div>
   </Transition>
@@ -189,7 +190,7 @@
         </div>
       </div>
       <div class="sm-footer">
-        <span>KRIS SHEDRACH © 2025</span>
+        <span>KRIS SHEDRACH © {{ new Date().getFullYear() }}</span>
         <span>LAGOS // UTC+1</span>
       </div>
     </div>
@@ -424,9 +425,14 @@ function runBoot() {
       if (bootLogEl.value) bootLogEl.value.scrollTop = bootLogEl.value.scrollHeight
     })
     step++
-    setTimeout(tick, 180 + Math.random() * 120)
+    setTimeout(tick, 100 + Math.random() * 60)
   }
   setTimeout(tick, 300)
+}
+
+function skipBoot() {
+  soundFx.playBootChime()
+  booting.value = false
 }
 
 // ── WINDOW MANAGEMENT ──────────────────────────────

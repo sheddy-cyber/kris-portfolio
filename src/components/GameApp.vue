@@ -8,8 +8,11 @@
       <div class="gcb-text">
         <div class="gcb-title">QUANTUM PILOT</div>
         <div class="gcb-sub">
-          <span class="gcb-sub-desktop">Kris's Developer Record: <strong>{{ KRIS_SCORE }} PTS</strong> — Think you can beat me?</span>
-          <span class="gcb-sub-mobile">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></span>
+          <span v-if="!isKrisRecordBeaten" class="gcb-sub-desktop">Kris's Developer Record: <strong>{{ KRIS_SCORE }} PTS</strong> — Think you can beat me?</span>
+          <span v-else class="gcb-sub-desktop">Kris's Record ({{ KRIS_SCORE }} PTS) Beaten! Target to Beat: <strong>{{ targetScore }} PTS</strong></span>
+
+          <span v-if="!isKrisRecordBeaten" class="gcb-sub-mobile">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></span>
+          <span v-else class="gcb-sub-mobile">TARGET TO BEAT: <strong>{{ targetScore }} PTS</strong></span>
         </div>
       </div>
     </div>
@@ -18,19 +21,19 @@
     <div class="game-hud">
       <div class="hud-item">
         <div class="hud-label"><span class="desktop-only">YOUR </span>SCORE</div>
-        <div class="hud-val" :class="{ 'beat-kris': score > KRIS_SCORE }">{{ score }}</div>
+        <div class="hud-val" :class="{ 'beat-kris': score > targetScore || (isKrisRecordBeaten && score > KRIS_SCORE) }">{{ score }}</div>
       </div>
       <div class="hud-item hud-center">
         <div class="hud-label">COMBO<span class="desktop-only"> MULTIPLIER</span></div>
         <div class="hud-val hud-combo">{{ combo }}x</div>
       </div>
       <div class="hud-item hud-center hud-item-rival">
-        <div class="hud-label">KRIS'S RECORD</div>
-        <div class="hud-val hud-rival">{{ KRIS_SCORE }}</div>
+        <div class="hud-label">{{ isKrisRecordBeaten ? 'TARGET TO BEAT' : "KRIS'S RECORD" }}</div>
+        <div class="hud-val hud-rival">{{ targetScore }}</div>
       </div>
       <div class="hud-item hud-right">
         <div class="hud-label"><span class="desktop-only">YOUR </span>BEST</div>
-        <div class="hud-val" :style="{ color: playerBest > KRIS_SCORE ? 'var(--amber)' : 'var(--text-0)' }">{{ playerBest }}</div>
+        <div class="hud-val" :style="{ color: isKrisRecordBeaten ? 'var(--amber)' : 'var(--text-0)' }">{{ playerBest }}</div>
       </div>
     </div>
 
@@ -47,7 +50,10 @@
             </div>
             <div class="go-title">QUANTUM PILOT</div>
             <div class="go-tagline">Click/Tap to Fly & Blast Lasers · Dodge Cyber Towers</div>
-            <div class="go-record">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></div>
+            <div class="go-record">
+              <span v-if="!isKrisRecordBeaten">KRIS'S RECORD: <strong>{{ KRIS_SCORE }} PTS</strong></span>
+              <span v-else>TARGET TO BEAT (YOUR RECORD): <strong>{{ targetScore }} PTS</strong></span>
+            </div>
             <button class="go-btn" @click.stop="startGame" @touchend.stop.prevent="startGame">▶ ENGAGE FLIGHT</button>
             <div class="go-hint">Left-Click/Tap = Thruster & Fire &nbsp;·&nbsp; Spacebar = Fire Laser &nbsp;·&nbsp; P = Pause</div>
           </template>
@@ -57,12 +63,18 @@
               <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             </div>
             <div class="go-title" :style="{ color: score > KRIS_SCORE ? 'var(--amber)' : 'var(--red)' }">
-              {{ score > KRIS_SCORE ? 'RECORD SHATTERED!' : 'SYSTEM CRASHED!' }}
+              {{ score > targetScore ? 'NEW ALL-TIME RECORD!' : (score > KRIS_SCORE ? 'RECORD BEATEN!' : 'SYSTEM CRASHED!') }}
             </div>
             <div class="go-tagline">
-              {{ score > KRIS_SCORE
-                ? 'Incredible! You beat Kris Shedrach on his own operating system.'
-                : 'Systems offline. Reroute backup power and try again.' }}
+              <span v-if="score > targetScore">
+                Legendary! You set a new personal high score of {{ score }} PTS!
+              </span>
+              <span v-else-if="score > KRIS_SCORE">
+                Incredible! You beat Kris's record ({{ KRIS_SCORE }} PTS). Your all-time best to beat is {{ targetScore }} PTS.
+              </span>
+              <span v-else>
+                Target to beat: {{ targetScore }} PTS. Systems offline. Reroute backup power and try again.
+              </span>
             </div>
 
             <div class="go-scores">
@@ -71,8 +83,8 @@
                 <div class="go-score-val" :style="{ color: score > KRIS_SCORE ? 'var(--amber)' : '#ffffff' }">{{ score }}</div>
               </div>
               <div class="go-score-col">
-                <div class="go-score-label">KRIS'S RECORD</div>
-                <div class="go-score-val" style="color:var(--amber)">{{ KRIS_SCORE }}</div>
+                <div class="go-score-label">{{ isKrisRecordBeaten ? 'RECORD TO BEAT' : "KRIS'S RECORD" }}</div>
+                <div class="go-score-val" style="color:var(--amber)">{{ targetScore }}</div>
               </div>
               <div class="go-score-col">
                 <div class="go-score-label">YOUR BEST</div>
@@ -96,14 +108,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { soundFx } from '../audio/soundFx'
 
 const props = defineProps({
   active: { type: Boolean, default: true }
 })
 
-const KRIS_SCORE = 1560
+const KRIS_SCORE = 5089
 const LS_KEY = 'kris_portfolio_best_score_v2'
 
 const canvasEl = ref(null)
@@ -112,6 +124,14 @@ const phase = ref('start')
 const score = ref(0)
 const combo = ref(1)
 const playerBest = ref(0)
+
+const targetScore = computed(() => {
+  return Math.max(KRIS_SCORE, playerBest.value)
+})
+
+const isKrisRecordBeaten = computed(() => {
+  return playerBest.value > KRIS_SCORE
+})
 
 let ctx, W, H
 let rafId = null
@@ -217,11 +237,11 @@ function onFlap() {
 
 function shootLaser() {
   soundFx.playLaser()
-  const speedMult = 1 + Math.min(1.2, frame / 18000)
+  const speedMult = 1 + Math.min(0.75, frame / 5400)
   lasers.push({
     x: W * 0.22 + 24,
     y: py + 10,
-    vx: 8.5 + speedMult * 1.5
+    vx: 8.5 + speedMult * 1.8
   })
 }
 
@@ -252,8 +272,8 @@ function loop() {
 
   frame++
 
-  // Progressive slow speed scaling (gentle slope over extended survival time)
-  const speedMult = 1 + Math.min(1.2, frame / 18000)
+  // Gentle, smooth speed scaling
+  const speedMult = 1 + Math.min(0.75, frame / 5400)
   const currentPipeSpeed = BASE_PIPE_SPEED * speedMult
   const currentDroneSpeed = BASE_DRONE_SPEED * speedMult
 
@@ -264,7 +284,7 @@ function loop() {
 
   // Spawn obstacles with spatial compensation
   if (frame >= nextPipeFrame) {
-    const gap = Math.max(120, 138 - Math.min(16, Math.floor(frame / 6000) * 4))
+    const gap = Math.max(120, 138 - Math.min(16, Math.floor(frame / 900) * 2))
     const minH = 40
     const maxH = H - gap - 60
     const topH = minH + Math.random() * (maxH - minH)

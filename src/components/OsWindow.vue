@@ -16,6 +16,7 @@
       <div class="win-dots">
         <button
           class="win-dot close"
+          title="Close"
           aria-label="Close"
           @mousedown.stop
           @click.stop="$emit('close')"
@@ -24,6 +25,7 @@
         ></button>
         <button
           class="win-dot min"
+          title="Minimize"
           aria-label="Minimize"
           @mousedown.stop
           @click.stop="$emit('minimize')"
@@ -32,6 +34,7 @@
         ></button>
         <button
           class="win-dot max"
+          title="Maximize"
           aria-label="Maximize"
           @mousedown.stop
           @click.stop="toggleMax"
@@ -212,13 +215,19 @@ onUnmounted(() => {
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
   pointer-events: all;
   overflow: hidden;
-  animation: winOpen 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: windowOpen 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-@keyframes winOpen {
-  from { opacity: 0; transform: scale(0.94) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes windowOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .os-window.is-focused {
@@ -242,8 +251,8 @@ onUnmounted(() => {
 .win-titlebar {
   height: 38px;
   flex-shrink: 0;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 100%);
+  border-bottom: 1px solid var(--border-2);
   display: flex;
   align-items: center;
   padding: 0 14px;

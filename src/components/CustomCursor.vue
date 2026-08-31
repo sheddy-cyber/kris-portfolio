@@ -146,6 +146,7 @@ onUnmounted(() => {
   z-index: 2147483647;
   transition: transform 0.08s ease;
   will-change: transform, left, top;
+  contain: layout style;
 }
 
 .cursor-ring {
@@ -159,6 +160,7 @@ onUnmounted(() => {
   transition: transform 0.12s ease, border-color 0.2s;
   will-change: transform, left, top;
   box-shadow: 0 0 12px var(--accent-glow);
+  contain: layout style;
 }
 
 .cursor-ring.hovering {

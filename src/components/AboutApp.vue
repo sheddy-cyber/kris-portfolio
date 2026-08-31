@@ -115,7 +115,7 @@
                 <span class="scc-skill-pct">{{ sk.pct }}%</span>
               </div>
               <div class="scc-track">
-                <div class="scc-fill" :style="{ width: sk.pct + '%' }"></div>
+                <div class="scc-fill" :style="{ width: skillsVisible ? sk.pct + '%' : '0%' }"></div>
               </div>
             </div>
           </div>
@@ -148,6 +148,7 @@ import { soundFx } from '../audio/soundFx'
 const emit = defineEmits(['open-app', 'notify'])
 
 const activeTab = ref('overview')
+const skillsVisible = ref(false)
 
 const tabs = [
   { id: 'overview', badge: '// 01', label: 'OVERVIEW' },
@@ -159,11 +160,22 @@ const tabs = [
 function selectTab(id) {
   soundFx.playClick()
   activeTab.value = id
+  if (id === 'skills') {
+    skillsVisible.value = false
+    setTimeout(() => { skillsVisible.value = true }, 50)
+  }
 }
 
 function downloadCv() {
   soundFx.playSuccess()
-  emit('notify', 'Kris_Shedrach_Senior_FullStack_Engineer_CV.pdf downloaded successfully.')
+  const link = document.createElement('a')
+  link.href = '/Kris_Shedrach_CV.pdf'
+  link.download = 'Kris_Shedrach_CV.pdf'
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  emit('notify', 'Kris_Shedrach_Senior_FullStack_Engineer_CV.pdf download initialized.')
 }
 
 const experience = [
@@ -369,7 +381,7 @@ const testimonials = [
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transform: translateY(7px) scale(0.93);
+  transform: translateY(9px) scale(0.91);
   display: block;
 }
 
@@ -673,7 +685,9 @@ const testimonials = [
 .scc-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), var(--green));
-  border-radius: 2px;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 /* Testimonials */

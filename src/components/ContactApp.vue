@@ -134,6 +134,12 @@
             <span>Payload encrypted and dispatched to Kris. Expect a response shortly!</span>
           </div>
         </div>
+
+        <!-- Error Banner -->
+        <div v-if="formError" class="cf-error-banner">
+          <span class="ceb-icon">✕</span>
+          <span>{{ formError }}</span>
+        </div>
       </form>
     </div>
   </div>
@@ -142,6 +148,16 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { soundFx } from '../audio/soundFx'
+import emailjs from '@emailjs/browser'
+
+// ── EmailJS Configuration ──────────────────────────
+// Sign up at https://www.emailjs.com (free tier: 200 emails/month)
+// 1. Create an Email Service (Gmail) → get SERVICE_ID
+// 2. Create an Email Template → get TEMPLATE_ID  
+// 3. Get your Public Key from Account → API Keys
+const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'   // TODO: Replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID' // TODO: Replace with your EmailJS template ID
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'    // TODO: Replace with your EmailJS public key
 
 const props = defineProps({
   initialService: { type: String, default: '' }
@@ -178,27 +194,64 @@ function copyEmail() {
   })
 }
 
-function sendMessage() {
+const formError = ref('')
+
+function validateForm() {
+  formError.value = ''
+  if (!form.value.name.trim()) {
+    formError.value = 'Name / Organization is required.'
+    return false
+  }
+  if (!form.value.email.trim()) {
+    formError.value = 'Email or contact handle is required.'
+    return false
+  }
+  if (!form.value.message.trim()) {
+    formError.value = 'Project specifications are required.'
+    return false
+  }
+  return true
+}
+
+async function sendMessage() {
+  if (!validateForm()) return
+  
   soundFx.playClick()
   sending.value = true
   sent.value = false
+  formError.value = ''
 
   encryptionStep.value = 'ENCRYPTING PAYLOAD WITH RSA-4096...'
-  setTimeout(() => {
-    encryptionStep.value = 'COMPUTING SHA-256 INTEGRITY HASH...'
-  }, 500)
+  
+  await new Promise(r => setTimeout(r, 400))
+  encryptionStep.value = 'COMPUTING SHA-256 INTEGRITY HASH...'
+  
+  await new Promise(r => setTimeout(r, 400))
+  encryptionStep.value = 'TRANSMITTING VIA SECURE CHANNEL...'
 
-  setTimeout(() => {
-    encryptionStep.value = 'TRANSMITTING VIA SECURE WEBSOCKET...'
-  }, 1000)
+  try {
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      {
+        from_name: form.value.name,
+        from_email: form.value.email,
+        service_type: form.value.service || 'Not specified',
+        message: form.value.message,
+      },
+      EMAILJS_PUBLIC_KEY
+    )
 
-  setTimeout(() => {
     sending.value = false
     sent.value = true
     soundFx.playSuccess()
-    emit('notify', 'Secure message transmitted successfully to Kris Shedrach.')
+    emit('notify', 'Message transmitted successfully to Kris Shedrach.')
     form.value = { name: '', email: '', service: '', message: '' }
-  }, 1500)
+  } catch (error) {
+    sending.value = false
+    formError.value = 'Transmission failed. Please try again or email directly.'
+    emit('notify', 'Message dispatch failed — please try emailing directly.')
+  }
 }
 </script>
 
@@ -492,6 +545,24 @@ function sendMessage() {
 }
 .csb-text span {
   color: var(--text-0);
+}
+
+.cf-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--red);
+  margin-top: 8px;
+}
+
+.ceb-icon {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 @media (max-width: 680px) {

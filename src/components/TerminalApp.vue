@@ -401,7 +401,7 @@ onMounted(() => {
   font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
   font-size: 12px;
   color: var(--text-0);
-  padding: 12px;
+  padding: 12px 12px 16px 12px;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -468,7 +468,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-right: 4px;
+  padding-right: 6px;
+  padding-bottom: 20px;
 }
 
 .term-cmd-line {
@@ -497,15 +498,27 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
   flex-shrink: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.term-input-row:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .term-input {
   flex: 1;
   background: transparent;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-0);

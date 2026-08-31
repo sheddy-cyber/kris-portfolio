@@ -332,7 +332,8 @@ function openApp(id) {
   border: none;
   color: var(--text-2);
   cursor: pointer;
-  padding: 5px 2px;
+  padding: 10px 4px;
+  min-height: 44px;
   border-radius: 8px;
   transition: all 0.15s;
   flex: 1;
@@ -378,6 +379,7 @@ function openApp(id) {
   border-bottom: 1px solid var(--border-2);
   border-radius: 18px 18px 0 0;
   max-height: 85vh;
+  max-height: 85dvh;
   overflow: hidden;
   box-shadow: 0 -10px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--border-glow);
   padding-bottom: 12px;
@@ -417,13 +419,13 @@ function openApp(id) {
   background: var(--bg-2);
   border: 1px solid var(--border);
   color: var(--text-1);
-  width: 26px;
-  height: 26px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;

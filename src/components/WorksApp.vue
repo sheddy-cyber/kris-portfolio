@@ -540,7 +540,29 @@ const filteredProjects = computed(() => {
   flex-direction: column;
   min-height: 380px;
   transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  animation: cardFadeUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
+
+@keyframes cardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.work-card:nth-child(1) { animation-delay: 0s; }
+.work-card:nth-child(2) { animation-delay: 0.06s; }
+.work-card:nth-child(3) { animation-delay: 0.12s; }
+.work-card:nth-child(4) { animation-delay: 0.18s; }
+.work-card:nth-child(5) { animation-delay: 0.24s; }
+.work-card:nth-child(6) { animation-delay: 0.3s; }
+.work-card:nth-child(7) { animation-delay: 0.36s; }
+.work-card:nth-child(8) { animation-delay: 0.42s; }
+.work-card:nth-child(9) { animation-delay: 0.48s; }
 
 .work-card:hover {
   border-color: var(--border-glow);
@@ -551,8 +573,15 @@ const filteredProjects = computed(() => {
 .wc-thumb {
   position: relative;
   height: 185px;
-  background: #000;
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 50%, var(--bg-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
   overflow: hidden;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .wc-thumb-img {

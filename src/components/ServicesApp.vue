@@ -303,6 +303,7 @@ const services = [
 .svc-action-btn {
   margin-top: 6px;
   padding: 8px;
+  min-height: 44px;
   background: transparent;
   border: 1px dashed var(--border-2);
   border-radius: 6px;

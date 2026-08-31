@@ -46,6 +46,23 @@ input, textarea, select {
   background: var(--accent);
 }
 
+/* Accessible Focus Indicators */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
 /* ── CRT SCANLINES OVERLAY ────────────────────────── */
 .scanlines-overlay {
   position: fixed;
@@ -166,6 +183,34 @@ input, textarea, select {
   height: 60px;
   max-width: 440px;
   overflow: hidden;
+}
+
+.boot-skip-btn {
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+  animation: fadeIn 0.5s 1s forwards;
+}
+
+.boot-skip-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
 /* ── DESKTOP SHELL ───────────────────────────────── */
@@ -345,7 +390,8 @@ input, textarea, select {
   right: 0;
   height: var(--taskbar-h, 48px);
   background: var(--surface-glass-heavy);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-2);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   padding: 0 14px;
@@ -539,7 +585,7 @@ input, textarea, select {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transform: translateY(2.5px) scale(0.92);
+  transform: translateY(4.5px) scale(0.90);
   display: block;
 }
 
@@ -698,12 +744,17 @@ input, textarea, select {
   gap: 10px;
   max-width: 320px;
   pointer-events: all;
-  animation: toastSlide 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: toastSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes toastSlide {
   from { opacity: 0; transform: translateX(30px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .toast-icon {
