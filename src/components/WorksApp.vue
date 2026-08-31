@@ -343,7 +343,7 @@ const projects = [
     year: '2026',
     viewBox: '0 0 280 160',
     desc: 'Full-stack mobile application and backend extraction microservice engineered to extract, proxy, and download social video streams (YouTube, Instagram, X, Facebook) directly to native mobile galleries.',
-    architecture: 'Engineered with a native mobile client interface connected to a Python/Flask & Gunicorn microservice. Integrates yt-dlp, FFmpeg muxing, and a lightweight 64MB Node.js cryptographic PO-token provider to bypass datacenter IP bans. Features generator-based chunked HTTP streaming within strict 512MB RAM constraints, automatic H.264 codec normalization, and multi-tier self-healing Cobalt API fallbacks.',
+    architecture: 'Engineered with a native Android (Kotlin) mobile application interface connected to a Python/Flask & Gunicorn microservice. Integrates yt-dlp, FFmpeg muxing, and a lightweight 64MB Node.js cryptographic PO-token provider to bypass datacenter IP bans. Features generator-based chunked HTTP streaming within strict 512MB RAM constraints, automatic H.264 codec normalization, and multi-tier self-healing Cobalt API fallbacks.',
     metrics: [
       { val: '<512MB', label: 'RAM Footprint' },
       { val: '100%', label: 'H.264 Playability' },
@@ -355,7 +355,7 @@ const projects = [
       { title: 'Strict H.264 Codec Normalization', desc: 'Overrode default greedy stream selectors with custom format sorting (vcodec:h264), filtering out fragmented HEVC/AV1 streams to guarantee 100% video playback across older Android devices and WhatsApp sharing.' },
       { title: 'Resilient Self-Healing Fallback Routing', desc: 'Architected a multi-tiered extractor pipeline that queries fast Cobalt API endpoints first, dynamically failing over to the modified internal yt-dlp/FFmpeg engine upon Cloudflare blocks or rate limits.' }
     ],
-    stack: ['React Native', 'Python (Flask)', 'yt-dlp', 'FFmpeg', 'Node.js (PO Tokens)', 'Gunicorn', 'Bash Scripting', 'Chunked HTTP Streaming'],
+    stack: ['Android (Kotlin)', 'Python (Flask)', 'yt-dlp', 'FFmpeg', 'Node.js (PO Tokens)', 'Gunicorn', 'Bash Scripting', 'Chunked HTTP Streaming'],
     svgContent: `<rect width="280" height="160" fill="#06090e"/>`
   },
   {
