@@ -186,6 +186,7 @@ function executeCommand(raw) {
         text: `
 <div class="t-table">
   <div class="t-row-head"><span>PROJECT</span><span>CATEGORY</span><span>STACK</span></div>
+  <div class="t-row"><span class="t-cyan">VibeSkool</span><span>Web</span><span>React 18 · Vite · Monaco · Canvas · Node · Supabase</span></div>
   <div class="t-row"><span class="t-cyan">RUGAN NGO Platform</span><span>Web</span><span>React · TypeScript · Tailwind · Node</span></div>
   <div class="t-row"><span class="t-cyan">Kyrios Family Church</span><span>Web</span><span>React · TypeScript · Tailwind · Media Player</span></div>
   <div class="t-row"><span class="t-cyan">The Watchtower News</span><span>Web</span><span>React 18 · Node · PostgreSQL · Prisma</span></div>
@@ -193,8 +194,6 @@ function executeCommand(raw) {
   <div class="t-row"><span class="t-green">Record Am</span><span>Mobile</span><span>React Native 0.81 · Expo 54 · Supabase · Zustand</span></div>
   <div class="t-row"><span class="t-green">grab Video Extractor</span><span>Mobile / Backend</span><span>Kotlin (Android) · Python (Flask) · yt-dlp · FFmpeg</span></div>
   <div class="t-row"><span class="t-cyan">Modem Computer Tech</span><span>Web</span><span>Next.js 14 · TypeScript · Tailwind · Nodemailer</span></div>
-  <div class="t-row"><span class="t-green">SplitPay P2P</span><span>Mobile</span><span>React Native · Firebase · Express</span></div>
-  <div class="t-row"><span class="t-green">Kora Health</span><span>Mobile</span><span>React Native · Expo · HealthKit</span></div>
 </div>
 <div style="margin-top:6px;font-size:11px;color:var(--text-2)">Tip: Double-click 'works.dir' on the desktop or run 'open works' for full visual showcase.</div>`
       })

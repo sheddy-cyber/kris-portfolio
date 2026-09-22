@@ -404,44 +404,6 @@ const projects = [
     ],
     stack: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'Lucide React', 'Nodemailer', 'Schema.org JSON-LD', 'Netlify'],
     svgContent: `<rect width="280" height="160" fill="#06090e"/>`
-  },
-  {
-    cat: 'mobile',
-    name: 'SplitPay Cross-Border',
-    thumbnail: '/projects/project-placeholder.jpg',
-    year: '2023',
-    viewBox: '0 0 280 160',
-    desc: 'Peer-to-peer split payment & social escrow app supporting multi-currency conversions and instant settlement.',
-    architecture: 'React Native, Node.js microservices, Flutterwave & Paystack APIs, biometric security, and end-to-end encrypted transaction receipts.',
-    metrics: [
-      { val: '85k+', label: 'Transactions' },
-      { val: '12', label: 'Currencies' },
-      { val: '99.9%', label: 'Settlement' }
-    ],
-    challenges: [
-      { title: 'Concurrent Multi-Currency Ledger', desc: 'Devised transactional isolation locks ensuring zero balance mismatch during simultaneous settlement.' }
-    ],
-    stack: ['React Native', 'Firebase', 'Flutterwave API', 'Express', 'PostgreSQL'],
-    svgContent: `<rect width="280" height="160" fill="#040c06"/><rect x="65" y="8" width="66" height="116" rx="10" fill="#121924" stroke="#243347" stroke-width="1.5"/><rect x="149" y="8" width="66" height="116" rx="10" fill="#121924" stroke="#243347" stroke-width="1.5"/><rect x="71" y="18" width="54" height="96" rx="5" fill="#0b1017"/><rect x="155" y="18" width="54" height="96" rx="5" fill="#0b1017"/><circle cx="98" cy="54" r="18" fill="#0d2a14" stroke="#10b981" stroke-width="1.5" opacity="0.7"/><circle cx="182" cy="54" r="18" fill="#0d2a14" stroke="#10b981" stroke-width="1.5" opacity="0.7"/><rect x="76" y="80" width="54" height="5" rx="2" fill="#243347"/><rect x="160" y="80" width="54" height="5" rx="2" fill="#243347"/>`
-  },
-  {
-    cat: 'mobile',
-    name: 'Kora Health & Wellness Suite',
-    thumbnail: '/projects/project-placeholder.jpg',
-    year: '2024',
-    viewBox: '0 0 280 160',
-    desc: 'Cross-platform biometric tracking suite with telemetry charts, Apple Health / Google Fit sync, and workout interval timers.',
-    architecture: 'React Native, Expo SDK, HealthKit & Google Fit integration, SQLite local cache, and Node.js analytics backend.',
-    metrics: [
-      { val: '48k+', label: 'Workouts Logged' },
-      { val: '60 FPS', label: 'Graph Render' },
-      { val: '4.8 / 5.0', label: 'User Score' }
-    ],
-    challenges: [
-      { title: 'Wearable Sensor Ingestion', desc: 'Filtered irregular heart rate & pedometer sensor data with low-pass Kalman filter algorithms in JavaScript.' }
-    ],
-    stack: ['React Native', 'Expo', 'HealthKit', 'Node.js', 'PostgreSQL', 'Chart.js'],
-    svgContent: `<rect width="280" height="160" fill="#080614"/><rect x="90" y="8" width="100" height="144" rx="12" fill="#121924" stroke="#a855f7" stroke-width="1.5"/><circle cx="140" cy="65" r="28" fill="none" stroke="#a855f7" stroke-width="4" stroke-dasharray="120,40"/><text x="140" y="70" text-anchor="middle" fill="#fff" font-size="12" font-family="sans-serif" font-weight="bold">8.4k</text><rect x="105" y="105" width="70" height="6" rx="3" fill="#38bdf8"/><rect x="105" y="118" width="50" height="6" rx="3" fill="#10b981"/>`
   }
 ]
 
