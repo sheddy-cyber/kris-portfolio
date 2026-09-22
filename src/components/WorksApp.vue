@@ -384,13 +384,13 @@ const projects = [
   },
   {
     cat: 'web',
-    name: 'Modem Computer Technology',
-    thumbnail: '/projects/modem.png',
-    liveUrl: 'https://modemcomputertechnology.netlify.app/',
+    name: 'Hero Link Systems Limited',
+    thumbnail: '/projects/herolinksystems.png',
+    liveUrl: 'https://herolinksystems.netlify.app/',
     githubUrl: 'https://github.com/sheddy-cyber/modem-nextjs',
     year: '2025',
     viewBox: '0 0 280 160',
-    desc: 'Commercial web platform for Modem Computer Technology showcasing computer training certifications, IT hardware/accessory sales, and technical repair services.',
+    desc: 'Commercial web platform for Hero Link Systems Limited showcasing computer training certifications, IT hardware/accessory sales, and technical repair services.',
     architecture: 'Converted from legacy vanilla stack into a high-performance Next.js 14 App Router application with TypeScript and Tailwind CSS. Features Schema.org JSON-LD structured data (EducationalOrganization & Store), automated sitemaps/robots generation, zero-CLS Google Fonts, Nodemailer enquiry dispatch, and automatic WebP/AVIF image optimization.',
     metrics: [
       { val: '100/100', label: 'Lighthouse SEO' },

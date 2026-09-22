@@ -193,7 +193,7 @@ function executeCommand(raw) {
   <div class="t-row"><span class="t-cyan">The 24 Log</span><span>Web / PWA</span><span>Vanilla JS (ES6+) · HTML5 · CSS3 · PWA · State Machine</span></div>
   <div class="t-row"><span class="t-green">Record Am</span><span>Mobile</span><span>React Native 0.81 · Expo 54 · Supabase · Zustand</span></div>
   <div class="t-row"><span class="t-green">grab Video Extractor</span><span>Mobile / Backend</span><span>Kotlin (Android) · Python (Flask) · yt-dlp · FFmpeg</span></div>
-  <div class="t-row"><span class="t-cyan">Modem Computer Tech</span><span>Web</span><span>Next.js 14 · TypeScript · Tailwind · Nodemailer</span></div>
+  <div class="t-row"><span class="t-cyan">Hero Link Systems</span><span>Web</span><span>Next.js 14 · TypeScript · Tailwind · Nodemailer</span></div>
 </div>
 <div style="margin-top:6px;font-size:11px;color:var(--text-2)">Tip: Double-click 'works.dir' on the desktop or run 'open works' for full visual showcase.</div>`
       })

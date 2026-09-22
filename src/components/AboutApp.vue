@@ -170,12 +170,12 @@ function downloadCv() {
   soundFx.playSuccess()
   const link = document.createElement('a')
   link.href = '/Kris_Shedrach_CV.pdf'
-  link.download = 'Kris_Shedrach_CV.pdf'
+  link.download = 'Shedrach Full Stack Dev CV.pdf'
   link.target = '_blank'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  emit('notify', 'Kris_Shedrach_Senior_FullStack_Engineer_CV.pdf download initialized.')
+  emit('notify', 'Shedrach Full Stack Dev CV.pdf download initiated.')
 }
 
 const experience = [
