@@ -218,6 +218,30 @@ function openRepo() {
 const projects = [
   {
     cat: 'web',
+    name: 'VibeSkool',
+    thumbnail: '/projects/vibeskool.png',
+    liveUrl: 'https://vibeskool.vercel.app',
+    githubUrl: 'https://github.com/sheddy-cyber/vibeskool',
+    year: '2026',
+    viewBox: '0 0 280 160',
+    desc: 'Collaborative engineering classroom and coding platform teaching Minimum Effective Knowledge (MEK) for software development and AI-assisted programming with zero-config in-browser execution and live telemetry.',
+    architecture: 'Engineered as a high-performance React 18 + Vite SPA with CSS Modules and a custom design system. Features Monaco Editor with an in-browser Python/JS VM, an interactive 60 FPS HTML5 Canvas physics wave simulation, self-hosted subsetted .woff2 typography, and a modular Node.js/Express REST backend backed by Supabase PostgreSQL with Google OAuth 2.0 and JWT auth.',
+    metrics: [
+      { val: '0 Config', label: 'In-Browser VM' },
+      { val: '60 FPS', label: 'Canvas Physics' },
+      { val: '100%', label: 'Cross-Platform' }
+    ],
+    challenges: [
+      { title: 'Cross-Platform Font Parity on Mobile Devices', desc: 'Extracted and subsetted Microsoft Segoe UI into lightweight modern .woff2 files (~88–94 KB) using pyftsubset with fallback src: local("Segoe UI"), url(...) rules, ensuring 0ms local font loading on Windows while delivering pixel-perfect typography on iOS and Android.' },
+      { title: 'Mobile Responsiveness for High-Density Telemetry Tables', desc: 'Architected a horizontal momentum scroll container (-webkit-overflow-scrolling: touch) with non-wrapping cell rules (white-space: nowrap) on status badges and action buttons, guaranteeing clear 5-column live telemetry without badge clipping down to 360px viewports.' },
+      { title: 'Third-Party Auth Security & COOP/COEP Policies', desc: 'Overcame Google Identity Services (GSI) Cross-Origin Opener Policy popup communication blocks by refactoring authentication to exchange Google ID tokens through a dedicated backend verification endpoint with Google Auth Library and signed stateless JWT session tokens.' },
+      { title: '60 FPS Interactive Canvas Without Main-Thread Stutter', desc: 'Implemented touch-action: pan-y to preserve native vertical page scrolling while tracking horizontal deflection, combining requestAnimationFrame delta-time throttling and off-screen canvas pre-renders for sustained 60 FPS on mobile.' }
+    ],
+    stack: ['React 18', 'Vite', 'Monaco Editor', 'HTML5 Canvas', 'Node.js', 'Express.js', 'PostgreSQL (Supabase)', 'Google OAuth 2.0', 'JWT', 'CSS Modules'],
+    svgContent: `<rect width="280" height="160" fill="#06090e"/>`
+  },
+  {
+    cat: 'web',
     name: 'RUGAN NGO Platform',
     thumbnail: '/projects/rugan.png',
     liveUrl: 'https://www.rugan.org/',
