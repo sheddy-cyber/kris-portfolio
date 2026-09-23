@@ -36,7 +36,7 @@
     <div class="blog-subbar">
       <div class="bs-left">
         <span class="bs-indicator">●</span>
-        <span class="bs-count">SHOWING {{ filteredArticles.length }} OF {{ articles.length }} ARTICLES</span>
+        <span class="bs-count">SHOWING {{ filteredArticles.length }} OF {{ articles.length }} {{ articles.length === 1 ? 'ARTICLE' : 'ARTICLES' }}</span>
       </div>
     </div>
 
@@ -46,7 +46,17 @@
       <div v-if="filteredArticles.length === 0" class="blog-empty-state">
         <div class="empty-icon">📂</div>
         <div class="empty-title">NO MATCHING ARTICLES FOUND</div>
-        <p class="empty-desc">No publications match your filter criteria "{{ searchQuery }}".</p>
+        <p class="empty-desc">
+          <template v-if="activePlatform !== 'All' && !searchQuery">
+            No articles published on {{ activePlatform }} yet. Check back soon!
+          </template>
+          <template v-else-if="searchQuery">
+            No publications match "{{ searchQuery }}".
+          </template>
+          <template v-else>
+            No publications match your filter criteria.
+          </template>
+        </p>
         <button class="reset-filters-btn" @click="resetFilters">RESET SEARCH & FILTERS</button>
       </div>
 
@@ -132,7 +142,7 @@ const emit = defineEmits(['notify'])
 const searchQuery = ref('')
 const activePlatform = ref('All')
 
-const filterPlatforms = ['All', 'Dev.to', 'Medium', 'Hashnode', 'Substack', 'LinkedIn']
+const filterPlatforms = ['All', 'Dev.to', 'Medium', 'Substack', 'LinkedIn']
 
 function getPlatformIcon(platformName) {
   return PLATFORMS[platformName]?.icon || `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`

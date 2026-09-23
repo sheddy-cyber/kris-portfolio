@@ -207,12 +207,7 @@ function executeCommand(raw) {
         text: `
 <div class="t-table">
   <div class="t-row-head"><span>TITLE</span><span>PLATFORM</span><span>DATE</span></div>
-  <div class="t-row"><span class="t-cyan">Architecting Ultra-Responsive React Native Apps</span><span class="t-green">Dev.to</span><span>Aug 2026</span></div>
-  <div class="t-row"><span class="t-cyan">Scaling Full-Stack Apps with Next.js 14 & Supabase</span><span class="t-green">Medium</span><span>Jul 2026</span></div>
-  <div class="t-row"><span class="t-cyan">High-Throughput PostgreSQL Schemas with Prisma ORM</span><span class="t-green">Hashnode</span><span>May 2026</span></div>
-  <div class="t-row"><span class="t-cyan">The State Machine Pattern in Modern Frontends</span><span class="t-green">Substack</span><span>Apr 2026</span></div>
-  <div class="t-row"><span class="t-cyan">Resilient Offline-First Mobile Architectures (SQLite)</span><span class="t-green">Dev.to</span><span>Feb 2026</span></div>
-  <div class="t-row"><span class="t-cyan">From Web2 to Decentralized Protocols</span><span class="t-green">Medium</span><span>Dec 2025</span></div>
+  <div class="t-row"><span class="t-cyan">Building an Android Social-Media-Video-Downloader App</span><span class="t-green">Dev.to</span><span>Sep 2026</span></div>
 </div>
 <div style="margin-top:6px;font-size:11px;color:var(--text-2)">Tip: Double-click 'articles.md' or run 'open blog' to open the in-app reader catalog.</div>`
       })

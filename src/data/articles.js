@@ -42,99 +42,19 @@ export const PLATFORMS = {
 
 export const articles = [
   {
-    id: 'rn-perf-architecture',
-    title: 'Architecting Ultra-Responsive React Native Apps: Memory & Render Optimization',
+    id: 'android-social-video-downloader',
+    title: 'Building an Android Social-Media-Video-Downloader App Was Much Harder Than I Expected',
     platform: 'Dev.to',
-    url: 'https://dev.to',
-    date: 'Aug 2026',
-    readTime: '6 min read',
-    tags: ['React Native', 'Mobile', 'Performance', 'Zustand'],
-    featured: true,
-    summary: 'A deep-dive into eliminating unnecessary JS re-renders, managing unmounted component memory leaks, and profiling Hermes engine garbage collection spikes on low-end Android hardware.',
-    takeaways: [
-      'Isolating heavy state listeners using selective Zustand selectors rather than global Context providers.',
-      'Optimizing FlatList with getItemLayout, maxToRenderPerBatch, and FlashList migrations.',
-      'Preventing bridge traffic bottlenecks by running gestures directly on the UI thread with React Native Reanimated.'
-    ]
-  },
-  {
-    id: 'nextjs-supabase-scaling',
-    title: 'Scaling Full-Stack Applications with Next.js 14 and Supabase: Production Lessons',
-    platform: 'Medium',
-    url: 'https://medium.com',
-    date: 'Jul 2026',
-    readTime: '8 min read',
-    tags: ['Next.js', 'Supabase', 'PostgreSQL', 'Architecture'],
-    featured: true,
-    summary: 'Practical strategies for caching, Row Level Security (RLS) query optimization, and real-time subscription pooling in high-traffic SaaS and platform architectures.',
-    takeaways: [
-      'Structuring PostgreSQL indexes specifically to satisfy multi-tenant RLS policy evaluations without full table scans.',
-      'Using Next.js Server Components for heavy initial queries while deferring real-time mutations to edge-cached routes.',
-      'Managing WebSocket connection lifecycle in browser tabs to prevent socket starvation on Supabase databases.'
-    ]
-  },
-  {
-    id: 'postgres-prisma-throughput',
-    title: 'Demystifying High-Throughput PostgreSQL Schemas with Prisma ORM',
-    platform: 'Hashnode',
-    url: 'https://hashnode.com',
-    date: 'May 2026',
+    url: 'https://dev.to/krisshedrach/building-an-android-social-media-video-downloader-app-was-much-harder-than-i-expected-13a0',
+    date: 'Sep 2026',
     readTime: '7 min read',
-    tags: ['PostgreSQL', 'Prisma', 'Backend', 'Database'],
-    featured: false,
-    summary: 'How to avoid common N+1 query pitfalls, tune pgBouncer connection pooling, and design relational schemas that scale seamlessly from day one.',
-    takeaways: [
-      'Diagnosing Prisma query latency with query metrics logging and EXPLAIN ANALYZE on Postgres.',
-      'Configuring transaction timeouts and connection pool parameters under concurrent load spikes.',
-      'Strategic foreign key indexing and composite unique constraints for lightning-fast lookups.'
-    ]
-  },
-  {
-    id: 'state-machines-frontend',
-    title: 'The State Machine Pattern in Modern Frontends: Eliminating Impossible UI States',
-    platform: 'Substack',
-    url: 'https://substack.com',
-    date: 'Apr 2026',
-    readTime: '5 min read',
-    tags: ['Architecture', 'JavaScript', 'Vue 3', 'State Management'],
-    featured: false,
-    summary: 'Why boolean soup (`isLoading`, `hasError`, `isSuccess`) leads to buggy user experiences, and how deterministic state transitions create resilient user interfaces.',
-    takeaways: [
-      'Mapping out finite states before writing UI component markup.',
-      'Guaranteeing that mutually exclusive states (e.g. submitting vs. error recovery) can never collide.',
-      'Applying declarative finite state patterns to audio players, checkout flows, and window managers.'
-    ]
-  },
-  {
-    id: 'offline-first-mobile',
-    title: 'Building Resilient Offline-First Mobile Architectures with Local SQLite & Cloud Sync',
-    platform: 'Dev.to',
-    url: 'https://dev.to',
-    date: 'Feb 2026',
-    readTime: '9 min read',
-    tags: ['React Native', 'SQLite', 'Offline First', 'Sync'],
+    tags: ['Android', 'Kotlin', 'Python', 'yt-dlp', 'FFmpeg', 'Open Source'],
     featured: true,
-    summary: 'A comprehensive guide to building apps that function flawlessly with zero connectivity, queuing mutations reliably, and resolving conflict resolution on reconnect.',
+    summary: "A transparent engineering breakdown of architecting 'grab' (an open-source Android video downloader) and its Python backend: bypassing strict YouTube bot detection with yt-dlp, resolving separate AV streams and codec incompatibility with FFmpeg, and surviving 512MB RAM constraints on production servers.",
     takeaways: [
-      'Implementing optimistic local writes immediately with instant UI feedback.',
-      'Architecting an idempotent background sync queue with retry backoff and telemetry.',
-      'Handling multi-device conflict resolution strategies (Last-Write-Wins vs. Vector Clocks).'
-    ]
-  },
-  {
-    id: 'web3-fullstack-perspective',
-    title: 'From Web2 to Decentralized Protocols: A Pragmatic Full-Stack Engineer’s Perspective',
-    platform: 'Medium',
-    url: 'https://medium.com',
-    date: 'Dec 2025',
-    readTime: '6 min read',
-    tags: ['Web3', 'Blockchain', 'Smart Contracts', 'Ethers.js'],
-    featured: false,
-    summary: 'Breaking past the hype: analyzing real-world smart contract interactions, gas fee considerations, and how to seamlessly bridge web2 APIs with on-chain data.',
-    takeaways: [
-      'Bridging RPC provider latency with local optimistic caching.',
-      'Writing secure frontend interactions that handle rejected wallet signatures gracefully.',
-      'Balancing on-chain immutability with off-chain metadata storage on decentralized networks.'
+      'Bypassing YouTube datacenter IP blacklists and bot checks using yt-dlp plugins, cookies, and PoToken mechanisms.',
+      'Merging disparate video/audio streams and engineering format-selection queries for WhatsApp-compatible H.264 / AAC codecs.',
+      'Optimizing memory usage and preventing OOM crashes on resource-constrained 512MB RAM cloud environments.'
     ]
   }
 ]
