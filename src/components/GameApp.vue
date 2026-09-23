@@ -212,7 +212,7 @@ function reset() {
 }
 
 function startGame() {
-  soundFx.playClick()
+  soundFx.playClick(true)
   initCanvas(true)
   reset()
   phase.value = 'playing'
@@ -504,7 +504,7 @@ function draw() {
   min-height: 0;
   flex: 1;
   background: #06090e;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
   overflow: hidden;
   box-sizing: border-box;

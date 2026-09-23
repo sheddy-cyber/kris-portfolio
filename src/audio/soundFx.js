@@ -6,9 +6,17 @@
 class SoundFxEngine {
   constructor() {
     this.ctx = null
-    this.muted = false
+    // UI sounds off by default; game sounds remain active
+    this.muted = true
     this.volume = 0.4
     this.initialized = false
+
+    try {
+      const saved = localStorage.getItem('kris_os_ui_muted')
+      if (saved !== null) {
+        this.muted = saved === 'true'
+      }
+    } catch (_) {}
   }
 
   init() {
@@ -24,16 +32,19 @@ class SoundFxEngine {
     }
   }
 
-  ensureContext() {
+  ensureContext(ignoreMute = false) {
     if (!this.ctx) this.init()
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume()
     }
-    return this.ctx && !this.muted
+    return this.ctx && (ignoreMute || !this.muted)
   }
 
   setMuted(mute) {
     this.muted = mute
+    try {
+      localStorage.setItem('kris_os_ui_muted', String(mute))
+    } catch (_) {}
   }
 
   setVolume(vol) {
@@ -41,8 +52,8 @@ class SoundFxEngine {
   }
 
   // 1. Subtle futuristic click
-  playClick() {
-    if (!this.ensureContext()) return
+  playClick(force = false) {
+    if (!this.ensureContext(force)) return
     const t = this.ctx.currentTime
     const osc = this.ctx.createOscillator()
     const gain = this.ctx.createGain()
@@ -189,9 +200,9 @@ class SoundFxEngine {
     })
   }
 
-  // 8. Laser Blast for Game
+  // 8. Laser Blast for Game (plays even when UI sounds are muted)
   playLaser() {
-    if (!this.ensureContext()) return
+    if (!this.ensureContext(true)) return
     const t = this.ctx.currentTime
     const osc = this.ctx.createOscillator()
     const gain = this.ctx.createGain()
@@ -210,9 +221,9 @@ class SoundFxEngine {
     osc.stop(t + 0.13)
   }
 
-  // 9. Explosion for Game
+  // 9. Explosion for Game (plays even when UI sounds are muted)
   playExplosion() {
-    if (!this.ensureContext()) return
+    if (!this.ensureContext(true)) return
     const t = this.ctx.currentTime
     const bufferSize = this.ctx.sampleRate * 0.3
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate)

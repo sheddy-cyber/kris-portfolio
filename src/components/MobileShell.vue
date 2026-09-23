@@ -220,7 +220,7 @@ function openApp(id) {
   display: flex;
   flex-direction: column;
   background: var(--bg-0);
-  font-family: 'JetBrains Mono', 'Rajdhani', sans-serif;
+  font-family: 'IBM Plex Mono', 'Rajdhani', sans-serif;
   overflow: hidden;
   z-index: 1000;
 }

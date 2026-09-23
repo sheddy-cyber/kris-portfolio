@@ -281,7 +281,7 @@ const testimonials = [
   flex: 1;
   overflow: hidden;
   box-sizing: border-box;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
 }
 

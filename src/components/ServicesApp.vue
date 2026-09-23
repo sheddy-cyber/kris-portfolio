@@ -119,7 +119,7 @@ const services = [
   min-height: 0;
   flex: 1;
   box-sizing: border-box;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
 }
 

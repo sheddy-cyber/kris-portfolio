@@ -397,7 +397,7 @@ onMounted(() => {
   min-height: 0;
   flex: 1;
   background: var(--bg-1);
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   font-size: 12px;
   color: var(--text-0);
   padding: 12px 12px 16px 12px;

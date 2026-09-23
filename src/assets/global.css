@@ -7,6 +7,7 @@
 
 :root {
   --taskbar-h: 48px;
+  --font-mono: 'IBM Plex Mono', 'Share Tech Mono', monospace;
 }
 
 *, *::before, *::after {
@@ -21,7 +22,7 @@ html, body, #app {
   overflow: hidden;
   background: var(--bg-0);
   color: var(--text-0);
-  font-family: 'Rajdhani', 'JetBrains Mono', sans-serif;
+  font-family: 'Rajdhani', 'IBM Plex Mono', sans-serif;
   user-select: none;
 }
 
@@ -143,7 +144,7 @@ textarea:focus-visible {
 }
 
 .boot-version {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--text-2);
@@ -168,7 +169,7 @@ textarea:focus-visible {
 }
 
 .boot-status {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--accent);
   letter-spacing: 1.5px;
@@ -176,7 +177,7 @@ textarea:focus-visible {
 }
 
 .boot-log {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   color: var(--text-2);
   line-height: 1.8;
@@ -187,7 +188,7 @@ textarea:focus-visible {
 
 .boot-skip-btn {
   margin-top: 12px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -299,7 +300,7 @@ textarea:focus-visible {
 }
 
 .desk-icon span.di-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   font-weight: 600;
   color: var(--text-0);
@@ -354,7 +355,7 @@ textarea:focus-visible {
 }
 
 .desk-icon-hint span {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9.5px;
   font-weight: 700;
   color: var(--accent);
@@ -448,7 +449,7 @@ textarea:focus-visible {
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text-1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
@@ -511,7 +512,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
 }
 
@@ -555,7 +556,7 @@ textarea:focus-visible {
   overflow: hidden;
   box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-glow);
   animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 .sm-header {
@@ -653,7 +654,7 @@ textarea:focus-visible {
   padding: 16px;
   z-index: 95000;
   box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   animation: slideUp 0.2s ease;
 }
 
@@ -690,7 +691,7 @@ textarea:focus-visible {
   z-index: 99998;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-glow);
   min-width: 200px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 .ctx-item {
@@ -735,7 +736,7 @@ textarea:focus-visible {
   border-left: 3px solid var(--accent);
   border-radius: 8px;
   padding: 12px 16px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--text-0);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);

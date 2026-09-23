@@ -290,7 +290,7 @@ onUnmounted(() => {
 .win-dot.max { background: #28c840; }
 
 .win-title {
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   font-size: 11px;
   font-weight: 600;
   color: var(--text-1);
@@ -315,7 +315,7 @@ onUnmounted(() => {
 }
 
 .win-badge {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
   padding: 2px 8px;
   border-radius: 20px;

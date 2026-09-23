@@ -186,7 +186,7 @@ function toggleFullscreen() {
   flex-direction: column;
   gap: 14px;
   z-index: 99990;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
   animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

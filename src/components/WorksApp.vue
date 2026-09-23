@@ -424,7 +424,7 @@ const filteredProjects = computed(() => {
   gap: 12px;
   overflow: hidden;
   box-sizing: border-box;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
 }
 
@@ -873,7 +873,7 @@ const filteredProjects = computed(() => {
 }
 
 .cs-status-pill {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9.5px;
   background: var(--surface-glass-heavy);
   backdrop-filter: blur(8px);

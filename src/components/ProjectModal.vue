@@ -145,7 +145,7 @@ function openRepo() {
 }
 
 .pm-cat-badge {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
   letter-spacing: 2px;
   font-weight: 700;
@@ -222,7 +222,7 @@ function openRepo() {
 }
 
 .pm-status-pill {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
   background: rgba(11, 16, 23, 0.85);
   color: var(--green);
@@ -255,7 +255,7 @@ function openRepo() {
 }
 
 .pm-metric-lbl {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
   color: var(--text-2);
   letter-spacing: 1px;
@@ -268,7 +268,7 @@ function openRepo() {
 }
 
 .pm-sec-h {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 1.5px;
   color: var(--accent);
@@ -302,7 +302,7 @@ function openRepo() {
 }
 
 .pm-tech-pill {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   padding: 4px 10px;
   border-radius: 4px;

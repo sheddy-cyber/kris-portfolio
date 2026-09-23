@@ -185,7 +185,7 @@ onUnmounted(() => {
   flex: 1;
   overflow-y: auto;
   box-sizing: border-box;
-  font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  font-family: 'IBM Plex Mono', 'Share Tech Mono', monospace;
   color: var(--text-0);
   background: var(--bg-1);
 }
