@@ -44,7 +44,7 @@
               <svg viewBox="0 0 20 20" width="12" height="12" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             </button>
             <button class="a-act-btn secondary" @click="$emit('open-app', 'blog')">
-              <span>TECH ARTICLES</span>
+              <span>ARTICLES</span>
               <svg viewBox="0 0 20 20" width="12" height="12" fill="currentColor"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.447.894L10 14.618l-4.553 2.276A1 1 0 014 16V4z"/></svg>
             </button>
           </div>
