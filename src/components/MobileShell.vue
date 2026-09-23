@@ -1,22 +1,15 @@
 <template>
   <div class="mobile-os-shell">
-    <!-- Top Cyber Dynamic Island & Status Bar -->
+    <!-- Top Cyber Status Bar: Centered Pill -->
     <div class="mob-status-bar">
-      <div class="msb-left">
-        <span class="msb-carrier">KRIS.OS 5G</span>
-        <span class="msb-theme-tag">{{ currentTheme.toUpperCase() }}</span>
-      </div>
-
-      <!-- Center Dynamic Island -->
-      <div class="dynamic-island" @click="openApp('terminal')" title="Launch Hacker Terminal">
-        <span class="di-dot" :class="{ live: isRadioPlaying }"></span>
-        <span class="di-text">{{ isRadioPlaying ? `▶ ${currentTrack.title}` : 'KRIS SHEDRACH' }}</span>
-      </div>
-
-      <div class="msb-right">
-        <span class="msb-clock">{{ clock }}</span>
-        <span class="msb-battery"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor" style="display:inline-block;vertical-align:middle;margin-right:2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>98%</span>
-      </div>
+      <button
+        class="dynamic-island"
+        :class="{ active: mobileSettingsOpen }"
+        @click="toggleSettings"
+        title="Control Center"
+      >
+        <span class="di-text">◈ KS.CONTROL</span>
+      </button>
     </div>
 
     <!-- Mobile Screen Viewport -->
@@ -53,30 +46,21 @@
       <div v-show="activeApp === 'terminal'" class="mob-app-screen">
         <TerminalApp @set-theme="$emit('select-theme', $event)" @open-app="openApp" @notify="$emit('notify', $event)" />
       </div>
-      <div v-show="activeApp === 'sysmon'" class="mob-app-screen">
-        <SysMonApp :openWindows="[]" />
+      <div v-show="activeApp === 'blog'" class="mob-app-screen">
+        <BlogApp @notify="$emit('notify', $event)" />
       </div>
     </div>
 
-    <!-- Mobile Settings Bottom Sheet Modal Overlay -->
-    <Transition name="mob-sheet">
-      <div v-if="mobileSettingsOpen" class="mob-settings-overlay" @click="mobileSettingsOpen = false">
-        <div
-          class="mob-settings-modal"
-          :style="isDragging ? { transform: `translateY(${dragOffset}px)`, transition: 'none' } : {}"
-          @click.stop
-        >
-          <!-- Pull-down Handle Section -->
-          <div
-            class="mob-sheet-handle"
-            @touchstart="onTouchStart"
-            @touchmove="onTouchMove"
-            @touchend="onTouchEnd"
-          >
-            <div class="mob-sheet-bar-wrap">
-              <div class="mob-sheet-bar"></div>
+    <!-- Mobile Settings Top-Down HUD Dropdown Overlay -->
+    <Transition name="mob-settings-dropdown">
+      <div v-if="mobileSettingsOpen" class="mob-settings-overlay" @click="closeSettings">
+        <div class="mob-settings-modal" @click.stop>
+          <div class="mob-dropdown-header">
+            <div class="mob-dropdown-indicator">
+              <span class="mdi-hud-dot"></span>
+              <span class="mdi-hud-label">KS.OS // CONTROL PANEL</span>
             </div>
-            <button class="mob-sheet-close" @click="mobileSettingsOpen = false" title="Close Settings">✕</button>
+            <button class="mob-dropdown-close" @click="closeSettings" title="Close Settings">✕</button>
           </div>
           <QuickSettings
             isMobileView
@@ -97,7 +81,7 @@
         v-for="app in dockApps"
         :key="app.id"
         class="mob-dock-item"
-        :class="{ active: app.id === 'settings' ? mobileSettingsOpen : (activeApp === app.id && !mobileSettingsOpen) }"
+        :class="{ active: activeApp === app.id && !mobileSettingsOpen }"
         @click="openApp(app.id)"
       >
         <div class="mdi-icon" v-html="app.icon"></div>
@@ -118,7 +102,7 @@ import ContactApp from './ContactApp.vue'
 import GameApp from './GameApp.vue'
 import QuickSettings from './QuickSettings.vue'
 import TerminalApp from './TerminalApp.vue'
-import SysMonApp from './SysMonApp.vue'
+import BlogApp from './BlogApp.vue'
 import SynthRadioApp from './SynthRadioApp.vue'
 
 const props = defineProps({
@@ -136,37 +120,14 @@ const mobileSettingsOpen = ref(false)
 const isRadioPlaying = computed(() => synthRadio.isPlaying)
 const currentTrack = computed(() => synthRadio.currentTrack)
 
-// Pull down to dismiss gesture state
-const dragOffset = ref(0)
-const isDragging = ref(false)
-let startY = 0
-
-function onTouchStart(e) {
-  if (!e.touches || e.touches.length === 0) return
-  startY = e.touches[0].clientY
-  isDragging.value = true
-  dragOffset.value = 0
+function toggleSettings() {
+  soundFx.playClick()
+  mobileSettingsOpen.value = !mobileSettingsOpen.value
 }
 
-function onTouchMove(e) {
-  if (!isDragging.value || !e.touches || e.touches.length === 0) return
-  const currentY = e.touches[0].clientY
-  const delta = currentY - startY
-  if (delta > 0) {
-    dragOffset.value = delta
-  } else {
-    dragOffset.value = 0
-  }
-}
-
-function onTouchEnd() {
-  if (!isDragging.value) return
-  isDragging.value = false
-  if (dragOffset.value > 60) {
-    soundFx.playClick()
-    mobileSettingsOpen.value = false
-  }
-  dragOffset.value = 0
+function closeSettings() {
+  soundFx.playClick()
+  mobileSettingsOpen.value = false
 }
 
 const dockApps = [
@@ -196,18 +157,14 @@ const dockApps = [
     icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="16" cy="10" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg>`
   },
   {
-    id: 'settings',
-    label: 'Settings',
-    icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`
+    id: 'blog',
+    label: 'Articles',
+    icon: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`
   },
 ]
 
 function openApp(id) {
   soundFx.playClick()
-  if (id === 'settings') {
-    mobileSettingsOpen.value = !mobileSettingsOpen.value
-    return
-  }
   mobileSettingsOpen.value = false
   activeApp.value = id
 }
@@ -226,68 +183,47 @@ function openApp(id) {
 }
 
 .mob-status-bar {
-  height: 44px;
+  height: 48px;
   background: var(--surface-glass-heavy);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 14px;
   flex-shrink: 0;
   z-index: 20;
 }
 
-.msb-left, .msb-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: var(--text-1);
-}
-
-.msb-theme-tag {
-  font-size: 8px;
-  background: var(--bg-3);
-  color: var(--accent);
-  padding: 1px 5px;
-  border-radius: 3px;
-  border: 1px solid var(--border);
-}
-
 .dynamic-island {
-  background: #000;
+  background: var(--bg-2);
   border: 1px solid var(--border-2);
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 6px 16px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  max-width: 140px;
-  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  font-family: inherit;
+  transition: all 0.2s ease;
 }
 
-.di-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
+.dynamic-island:hover,
+.dynamic-island:active,
+.dynamic-island.active {
+  border-color: var(--accent);
+  background: var(--bg-3);
+  box-shadow: 0 0 16px var(--accent-glow);
 }
-.di-dot.live {
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: pulse 1s infinite alternate;
-}
+
 
 .di-text {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  color: #ffffff;
+  letter-spacing: 1.5px;
+  color: var(--text-0);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .mob-viewport {
@@ -357,105 +293,129 @@ function openApp(id) {
   white-space: nowrap;
 }
 
-/* Mobile Settings Modal Overlay (Rests directly on top of the bottom dock) */
+/* Mobile Settings Top-Down HUD Dropdown Overlay */
 .mob-settings-overlay {
   position: absolute;
-  top: 0;
+  top: 48px;
   left: 0;
   right: 0;
   bottom: calc(64px + env(safe-area-inset-bottom, 4px));
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  z-index: 18;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 25;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px 14px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mob-settings-modal {
+  width: 100%;
+  max-width: 440px;
   background: var(--surface-glass-heavy);
-  backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid var(--border-2);
-  border-bottom: 1px solid var(--border-2);
-  border-radius: 18px 18px 0 0;
-  max-height: 85vh;
-  max-height: 85dvh;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 -10px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--border-glow);
-  padding-bottom: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--border-glow), 0 0 24px var(--accent-glow);
+  padding-bottom: 10px;
+  transform-origin: top center;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.mob-sheet-handle {
+.mob-dropdown-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 2px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--surface-glass-heavy);
-  backdrop-filter: blur(24px);
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-y;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.mob-sheet-bar-wrap {
-  flex: 1;
+.mob-dropdown-indicator {
   display: flex;
-  justify-content: center;
-  padding-left: 26px;
+  align-items: center;
+  gap: 6px;
 }
 
-.mob-sheet-bar {
-  width: 40px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--text-2);
-  opacity: 0.5;
+.mdi-hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
 }
 
-.mob-sheet-close {
+.mdi-hud-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-2);
+}
+
+.mob-dropdown-close {
   background: var(--bg-2);
   border: 1px solid var(--border);
   color: var(--text-1);
-  width: 44px;
-  height: 44px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
 }
 
-.mob-sheet-close:hover {
+.mob-dropdown-close:hover,
+.mob-dropdown-close:active {
   background: var(--bg-3);
   color: var(--accent);
   border-color: var(--accent);
+  transform: scale(1.05);
 }
 
-/* Modal Bottom-Sheet Transition */
-.mob-sheet-enter-active,
-.mob-sheet-leave-active {
-  transition: opacity 0.22s ease;
+/* Modal Top-Down Dropdown Animation */
+.mob-settings-dropdown-enter-active,
+.mob-settings-dropdown-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.mob-sheet-enter-from,
-.mob-sheet-leave-to {
+.mob-settings-dropdown-enter-from,
+.mob-settings-dropdown-leave-to {
   opacity: 0;
 }
 
-.mob-sheet-enter-active .mob-settings-modal,
-.mob-sheet-leave-active .mob-settings-modal {
-  transition: transform 0.25s cubic-bezier(0.32, 1, 0.23, 1);
+.mob-settings-dropdown-enter-active .mob-settings-modal {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.25s ease;
 }
 
-.mob-sheet-enter-from .mob-settings-modal,
-.mob-sheet-leave-to .mob-settings-modal {
-  transform: translateY(100%);
+.mob-settings-dropdown-leave-active .mob-settings-modal {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.18s ease,
+              filter 0.18s ease;
+}
+
+.mob-settings-dropdown-enter-from .mob-settings-modal {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  filter: blur(4px);
+}
+
+.mob-settings-dropdown-leave-to .mob-settings-modal {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.97);
+  filter: blur(2px);
 }
 
 :deep(.ws-tip) {

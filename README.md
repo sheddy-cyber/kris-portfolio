@@ -27,8 +27,8 @@ A next-generation interactive operating system personal portfolio workstation fo
    - Interactive shell with autocomplete (Tab), history navigation (Arrow Up/Down), keystroke sounds, and commands:
      - `help`, `about`, `skills`, `projects`, `neofetch`, `theme <name>`, `music <play|stop|next>`, `matrix`, `ping <host>`, `contact`, `hire`, `clear`, `sudo rm -rf /`.
 
-5. **Live System Monitor & Task Manager (`sysmon.exe`)**:
-   - Real-time CPU performance wave graph on HTML5 Canvas, RAM gauges, system uptime timer, and active process controller with "Focus" and "Kill" actions.
+5. **Technical Blog & Publications (`articles.md` / `blog.app`)**:
+   - Interactive knowledge base and technical writings showcase across Dev.to, Medium, Hashnode, Substack, and LinkedIn, featuring live search, platform filtering, quick takeaway summaries, and external publication links.
 
 6. **Interactive Project Case Studies (`works.dir`)**:
    - Deep-dive case studies with architecture breakdown, key metrics, engineering challenges, stack pills, live demo links, and search & category filtering.
@@ -78,7 +78,7 @@ Outputs optimized production assets in `dist/`. Deploy to **Vercel**, **Netlify*
 | `Alt + A` | Open About Me (`about.exe`) |
 | `Alt + W` | Open Works & Portfolio (`works.dir`) |
 | `Alt + T` | Open Hacker Terminal (`terminal.sh`) |
-| `Alt + S` | Open System Monitor (`sysmon.exe`) |
+| `Alt + B` / `Alt + S` | Open Technical Blog & Articles (`articles.md`) |
 | `Alt + M` | Open Synthwave Radio (`radio.app`) |
 | `Alt + G` | Open Quantum Pilot Game (`game.exe`) |
 | `Alt + C` | Open Encrypted Contact (`contact.msg`) |
@@ -102,6 +102,8 @@ kris-portfolio/
     ├── assets/
     │   ├── themes.css           ← 5 distinct theme variable definitions
     │   └── global.css           ← Titanium glassmorphism & OS styles
+    ├── data/
+    │   └── articles.js          ← Technical articles data store & platforms
     └── components/
         ├── CustomCursor.vue     ← Reticle crosshair cyber cursor with magnetic hover
         ├── OsWindow.vue         ← Draggable/resizable window with Aero Snap
@@ -111,7 +113,7 @@ kris-portfolio/
         ├── ServicesApp.vue      ← 3D hover cards with deliverables breakdown
         ├── WorksApp.vue         ← Searchable portfolio with grid/list modes
         ├── TerminalApp.vue      ← Full-featured hacker CLI terminal
-        ├── SysMonApp.vue        ← Real-time CPU wave chart & process manager
+        ├── BlogApp.vue          ← Technical blog & multi-platform article showcase
         ├── SynthRadioApp.vue    ← Ambient radio player with audio visualizer
         ├── GameApp.vue          ← Quantum pilot space flight game
         ├── ContactApp.vue       ← Encrypted message console

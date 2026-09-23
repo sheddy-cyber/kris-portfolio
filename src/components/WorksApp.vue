@@ -585,27 +585,35 @@ const filteredProjects = computed(() => {
 .wc-overlay {
   position: absolute;
   inset: 0;
-  background: var(--surface-glass-heavy);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .wc-overlay span {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
   letter-spacing: 2px;
-  color: var(--accent);
+  color: #ffffff;
   border: 1px solid var(--accent);
   padding: 6px 14px;
   border-radius: 4px;
-  background: var(--accent-dim);
+  background: rgba(7, 10, 16, 0.82);
+  box-shadow: 0 0 14px var(--accent-glow);
+  transform: translateY(4px);
+  transition: transform 0.25s ease;
 }
 
 .work-card:hover .wc-overlay {
   opacity: 1;
+}
+
+.work-card:hover .wc-overlay span {
+  transform: translateY(0);
 }
 
 .wc-cat-badge {

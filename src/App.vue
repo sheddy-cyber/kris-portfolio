@@ -105,11 +105,9 @@
           @open-app="openApp"
           @notify="addNotification"
         />
-        <SysMonApp
-          v-if="win.id === 'sysmon'"
-          :openWindows="openWindows"
-          @focus-app="focusWindow"
-          @close-app="closeApp"
+        <BlogApp
+          v-if="win.id === 'blog'"
+          @notify="addNotification"
         />
         <SynthRadioApp
           v-if="win.id === 'radio'"
@@ -156,9 +154,9 @@
           <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4M12 12h.01"/></svg>
           {{ isRadioPlaying ? currentTrack.title : 'RADIO' }}
         </button>
-        <button class="tray-btn" @click="openApp('sysmon')" title="System Monitor">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-          CPU: {{ cpuVal }}%
+        <button class="tray-btn" @click="openApp('blog')" title="Technical Articles & Publications">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          ARTICLES
         </button>
         <button class="tray-btn" @click.stop="toggleQuickSettings" title="Control Center">
           <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -254,7 +252,7 @@ import AboutApp from './components/AboutApp.vue'
 import ServicesApp from './components/ServicesApp.vue'
 import WorksApp from './components/WorksApp.vue'
 import TerminalApp from './components/TerminalApp.vue'
-import SysMonApp from './components/SysMonApp.vue'
+import BlogApp from './components/BlogApp.vue'
 import SynthRadioApp from './components/SynthRadioApp.vue'
 import GameApp from './components/GameApp.vue'
 import ContactApp from './components/ContactApp.vue'
@@ -343,15 +341,15 @@ const appOrder = [
     iconSvg: `<svg viewBox="0 0 40 40"><rect x="4" y="10" width="32" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 14l16 11 16-11" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`
   },
   {
-    id: 'sysmon',
-    title: 'sysmon.exe',
-    badge: 'MONITOR',
-    menuLabel: 'System Monitor & Tasks',
-    iconLabel: 'sysmon.exe',
-    width: 660,
-    height: 480,
+    id: 'blog',
+    title: 'articles.md',
+    badge: 'ARTICLES',
+    menuLabel: 'Technical Articles & Blog',
+    iconLabel: 'blog.app',
+    width: 820,
+    height: 560,
     iconPos: 'left:136px;top:36px',
-    iconSvg: `<svg viewBox="0 0 40 40"><rect x="4" y="8" width="32" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><polyline points="8 24 14 16 20 26 26 14 32 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`
+    iconSvg: `<svg viewBox="0 0 40 40"><rect x="6" y="5" width="28" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="12" x2="28" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="18" x2="28" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="24" x2="22" y2="24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="27" cy="24" r="1.5" fill="currentColor"/></svg>`
   },
   {
     id: 'radio',
@@ -616,7 +614,6 @@ function toggleQuickSettings() {
 const clock = ref('12:00')
 const currentDateString = ref('')
 const currentDayTime = ref('')
-const cpuVal = ref(8)
 const isRadioPlaying = computed(() => synthRadio.isPlaying)
 const currentTrack = computed(() => synthRadio.currentTrack)
 
@@ -627,16 +624,12 @@ function tickClock() {
   currentDayTime.value = n.toLocaleTimeString()
 }
 
-function tickCpu() {
-  cpuVal.value = Math.min(98, 6 + Object.keys(windows.value).length * 6 + Math.floor(Math.random() * 8))
-}
-
 // ── CONTEXT MENU ───────────────────────────────────
 const ctxMenu = ref({ visible: false, x: 0, y: 0 })
 const ctxItems = [
   { label: 'Terminal Shell', action: () => openApp('terminal') },
   { label: 'Works & Case Studies', action: () => openApp('works') },
-  { label: 'System Monitor', action: () => openApp('sysmon') },
+  { label: 'Technical Articles & Blog', action: () => openApp('blog') },
   { label: 'Synthwave Radio', action: () => openApp('radio') },
   { sep: true },
   { label: 'Control Center Settings', action: () => { quickSettingsOpen.value = true } },
@@ -824,7 +817,6 @@ onMounted(() => {
       nextTick(() => {
         tickClock()
         setInterval(tickClock, 1000)
-        setInterval(tickCpu, 2000)
         initAmbientCanvas()
         // Open initial flagship window
         setTimeout(() => { openApp('about') }, 400)
@@ -860,7 +852,7 @@ onMounted(() => {
     if (e.altKey && e.key.toLowerCase() === 'w') { e.preventDefault(); openApp('works') }
     if (e.altKey && e.key.toLowerCase() === 'g') { e.preventDefault(); openApp('game') }
     if (e.altKey && e.key.toLowerCase() === 'm') { e.preventDefault(); openApp('radio') }
-    if (e.altKey && e.key.toLowerCase() === 's') { e.preventDefault(); openApp('sysmon') }
+    if (e.altKey && (e.key.toLowerCase() === 'b' || e.key.toLowerCase() === 's')) { e.preventDefault(); openApp('blog') }
     if (e.altKey && e.key.toLowerCase() === 'c') { e.preventDefault(); openApp('contact') }
     if (e.key === 'Escape') {
       startMenuOpen.value = false

@@ -135,6 +135,7 @@ function executeCommand(raw) {
   <div class="t-row"><span class="t-cmd">about</span><span class="t-desc">Print engineer overview and core focus areas</span></div>
   <div class="t-row"><span class="t-cmd">skills</span><span class="t-desc">Output full-stack & mobile capability matrix</span></div>
   <div class="t-row"><span class="t-cmd">projects</span><span class="t-desc">List highlighted production applications [args: --filter web|mobile]</span></div>
+  <div class="t-row"><span class="t-cmd">articles</span><span class="t-desc">List published technical articles and engineering deep-dives</span></div>
   <div class="t-row"><span class="t-cmd">theme &lt;name&gt;</span><span class="t-desc">Change UI palette [twitter | tokyo | matrix | solar | daylight]</span></div>
   <div class="t-row"><span class="t-cmd">music &lt;play|stop|next&gt;</span><span class="t-desc">Control procedural ambient synthwave generator</span></div>
   <div class="t-row"><span class="t-cmd">matrix</span><span class="t-desc">Run digital rain phosphor stream simulation</span></div>
@@ -197,6 +198,38 @@ function executeCommand(raw) {
 </div>
 <div style="margin-top:6px;font-size:11px;color:var(--text-2)">Tip: Double-click 'works.dir' on the desktop or run 'open works' for full visual showcase.</div>`
       })
+      break
+
+    case 'articles':
+    case 'blog':
+      history.value.push({
+        type: 'raw',
+        text: `
+<div class="t-table">
+  <div class="t-row-head"><span>TITLE</span><span>PLATFORM</span><span>DATE</span></div>
+  <div class="t-row"><span class="t-cyan">Architecting Ultra-Responsive React Native Apps</span><span class="t-green">Dev.to</span><span>Aug 2026</span></div>
+  <div class="t-row"><span class="t-cyan">Scaling Full-Stack Apps with Next.js 14 & Supabase</span><span class="t-green">Medium</span><span>Jul 2026</span></div>
+  <div class="t-row"><span class="t-cyan">High-Throughput PostgreSQL Schemas with Prisma ORM</span><span class="t-green">Hashnode</span><span>May 2026</span></div>
+  <div class="t-row"><span class="t-cyan">The State Machine Pattern in Modern Frontends</span><span class="t-green">Substack</span><span>Apr 2026</span></div>
+  <div class="t-row"><span class="t-cyan">Resilient Offline-First Mobile Architectures (SQLite)</span><span class="t-green">Dev.to</span><span>Feb 2026</span></div>
+  <div class="t-row"><span class="t-cyan">From Web2 to Decentralized Protocols</span><span class="t-green">Medium</span><span>Dec 2025</span></div>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--text-2)">Tip: Double-click 'articles.md' or run 'open blog' to open the in-app reader catalog.</div>`
+      })
+      break
+
+    case 'open':
+      const targetApp = (args[0] || '').toLowerCase()
+      const validApps = ['about', 'works', 'services', 'contact', 'game', 'radio', 'terminal', 'blog', 'articles']
+      if (targetApp === 'blog' || targetApp === 'articles') {
+        emit('open-app', 'blog')
+        history.value.push({ type: 'raw', text: `<span class="t-green">✓ Launching Technical Articles & Blog window...</span>` })
+      } else if (validApps.includes(targetApp)) {
+        emit('open-app', targetApp)
+        history.value.push({ type: 'raw', text: `<span class="t-green">✓ Launching ${targetApp}...</span>` })
+      } else {
+        history.value.push({ type: 'error', text: `Usage: open [about | works | services | contact | game | radio | blog | terminal]` })
+      }
       break
 
     case 'neofetch':
