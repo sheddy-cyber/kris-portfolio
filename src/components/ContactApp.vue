@@ -151,13 +151,10 @@ import { soundFx } from '../audio/soundFx'
 import emailjs from '@emailjs/browser'
 
 // ── EmailJS Configuration ──────────────────────────
-// Sign up at https://www.emailjs.com (free tier: 200 emails/month)
-// 1. Create an Email Service (Gmail) → get SERVICE_ID
-// 2. Create an Email Template → get TEMPLATE_ID  
-// 3. Get your Public Key from Account → API Keys
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID'   // TODO: Replace with your EmailJS service ID
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID' // TODO: Replace with your EmailJS template ID
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'    // TODO: Replace with your EmailJS public key
+// Reads from Vite environment variables (VITE_EMAILJS_*) or falls back to direct values.
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_uhkcyme'
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_3y9dw18'
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'pnw-i82JKms0pbXu4'
 
 const props = defineProps({
   initialService: { type: String, default: '' }
@@ -229,6 +226,21 @@ async function sendMessage() {
   await new Promise(r => setTimeout(r, 400))
   encryptionStep.value = 'TRANSMITTING VIA SECURE CHANNEL...'
 
+  if (
+    EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID' ||
+    EMAILJS_TEMPLATE_ID === 'YOUR_TEMPLATE_ID' ||
+    EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY' ||
+    !EMAILJS_SERVICE_ID ||
+    !EMAILJS_TEMPLATE_ID ||
+    !EMAILJS_PUBLIC_KEY
+  ) {
+    sending.value = false
+    formError.value = 'Email service not configured. Please set EmailJS credentials or email directly.'
+    soundFx.playError?.()
+    console.error('EmailJS credentials missing or set to placeholder defaults.')
+    return
+  }
+
   try {
     await emailjs.send(
       EMAILJS_SERVICE_ID,
@@ -248,8 +260,9 @@ async function sendMessage() {
     emit('notify', 'Message transmitted successfully to Kris Shedrach.')
     form.value = { name: '', email: '', service: '', message: '' }
   } catch (error) {
+    console.error('EmailJS transmission error:', error)
     sending.value = false
-    formError.value = 'Transmission failed. Please try again or email directly.'
+    formError.value = error?.text || 'Transmission failed. Please try again or email directly.'
     emit('notify', 'Message dispatch failed — please try emailing directly.')
   }
 }
