@@ -1,5 +1,10 @@
 <template>
-  <div class="contact-container">
+  <div
+    class="contact-container"
+    ref="containerRef"
+    :class="{ 'is-dragging': isDragging }"
+    :style="containerStyle"
+  >
     <!-- Left Column: Communication Coordinates -->
     <div class="contact-left-pane">
       <div class="cl-header">
@@ -59,6 +64,57 @@
       <div class="cl-response-box">
         <span class="cr-dot"></span>
         <span>Average Response Time: <strong>&lt; 12 Hours</strong> · Timezone: <strong>WAT (UTC+1)</strong></span>
+      </div>
+    </div>
+
+    <!-- Demarcation Resizer Bar (Mobile View) -->
+    <div
+      class="contact-demarcation-bar"
+      :class="{ dragging: isDragging }"
+      @pointerdown="startDemarcationDrag"
+      role="separator"
+      aria-orientation="horizontal"
+      aria-label="Adjust demarcation between contact coordinates and message form"
+    >
+      <div class="cd-grip-zone" @dblclick="onHandleDblClick">
+        <span class="cd-grip-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="3" y1="15" x2="21" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="cd-title">// DEMARCATION</span>
+        <span class="cd-hint">DRAG TO ADJUST</span>
+      </div>
+
+      <div class="cd-presets" @pointerdown.stop>
+        <button
+          type="button"
+          class="cd-pill"
+          :class="{ active: currentSnap === 'compact' }"
+          @click="snapTo('compact')"
+          title="Minimize coordinates to maximize form space"
+        >
+          FORM
+        </button>
+        <button
+          type="button"
+          class="cd-pill"
+          :class="{ active: currentSnap === 'split' }"
+          @click="snapTo('split')"
+          title="Balanced 50/50 view"
+        >
+          HALF
+        </button>
+        <button
+          type="button"
+          class="cd-pill"
+          :class="{ active: currentSnap === 'expanded' }"
+          @click="snapTo('expanded')"
+          title="Expand contact coordinates & links"
+        >
+          CARDS
+        </button>
       </div>
     </div>
 
@@ -145,7 +201,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { soundFx } from '../audio/soundFx'
 import emailjs from '@emailjs/browser'
 
@@ -265,6 +321,120 @@ async function sendMessage() {
     emit('notify', 'Message dispatch failed — please try emailing directly.')
   }
 }
+
+// ── Smooth Demarcation Resizing (Mobile View) ─────────────
+const containerRef = ref(null)
+const topPaneHeight = ref(210)
+const isDragging = ref(false)
+const currentSnap = ref('split') // 'compact' | 'split' | 'expanded' | 'custom'
+
+const containerStyle = computed(() => ({
+  '--top-pane-height': `${topPaneHeight.value}px`
+}))
+
+let startY = 0
+let startHeight = 0
+let rafId = null
+
+function initDefaultHeight() {
+  if (typeof window === 'undefined') return
+  if (window.innerWidth <= 768 && containerRef.value) {
+    const totalH = containerRef.value.getBoundingClientRect().height
+    if (totalH > 320) {
+      topPaneHeight.value = Math.round(totalH * 0.36)
+    }
+  }
+}
+
+function startDemarcationDrag(e) {
+  if (e.button !== undefined && e.button !== 0) return
+  isDragging.value = true
+  startY = e.clientY
+  startHeight = topPaneHeight.value
+  currentSnap.value = 'custom'
+  soundFx.playClick?.()
+
+  if (e.cancelable) e.preventDefault()
+
+  window.addEventListener('pointermove', onDemarcationMove, { passive: false })
+  window.addEventListener('pointerup', endDemarcationDrag)
+  window.addEventListener('pointercancel', endDemarcationDrag)
+}
+
+function onDemarcationMove(e) {
+  if (!isDragging.value) return
+  if (e.cancelable) e.preventDefault()
+
+  if (rafId) cancelAnimationFrame(rafId)
+  rafId = requestAnimationFrame(() => {
+    const container = containerRef.value
+    if (!container) return
+
+    const rect = container.getBoundingClientRect()
+    const containerHeight = rect.height
+    const minHeight = 75
+    const maxHeight = Math.max(minHeight, containerHeight - 140)
+
+    const deltaY = e.clientY - startY
+    const newHeight = Math.min(Math.max(startHeight + deltaY, minHeight), maxHeight)
+    topPaneHeight.value = Math.round(newHeight)
+  })
+}
+
+function endDemarcationDrag() {
+  if (!isDragging.value) return
+  isDragging.value = false
+  if (rafId) cancelAnimationFrame(rafId)
+
+  window.removeEventListener('pointermove', onDemarcationMove)
+  window.removeEventListener('pointerup', endDemarcationDrag)
+  window.removeEventListener('pointercancel', endDemarcationDrag)
+
+  const container = containerRef.value
+  if (container) {
+    const totalH = container.getBoundingClientRect().height
+    const ratio = topPaneHeight.value / totalH
+    if (ratio < 0.22) currentSnap.value = 'compact'
+    else if (ratio > 0.52) currentSnap.value = 'expanded'
+    else currentSnap.value = 'split'
+  }
+}
+
+function snapTo(preset) {
+  soundFx.playTypeKey?.()
+  currentSnap.value = preset
+  const container = containerRef.value
+  const totalH = container ? container.getBoundingClientRect().height : 550
+
+  if (preset === 'compact') {
+    topPaneHeight.value = 75
+  } else if (preset === 'split') {
+    topPaneHeight.value = Math.round(totalH * 0.36)
+  } else if (preset === 'expanded') {
+    topPaneHeight.value = Math.min(360, Math.round(totalH * 0.62))
+  }
+}
+
+function onHandleDblClick() {
+  if (topPaneHeight.value <= 100) {
+    snapTo('split')
+  } else {
+    snapTo('compact')
+  }
+}
+
+onMounted(() => {
+  initDefaultHeight()
+  window.addEventListener('resize', initDefaultHeight)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', initDefaultHeight)
+  window.removeEventListener('pointermove', onDemarcationMove)
+  window.removeEventListener('pointerup', endDemarcationDrag)
+  window.removeEventListener('pointercancel', endDemarcationDrag)
+  if (rafId) cancelAnimationFrame(rafId)
+})
 </script>
 
 <style scoped>
@@ -568,14 +738,144 @@ async function sendMessage() {
   font-weight: 700;
 }
 
-@media (max-width: 680px) {
+.contact-demarcation-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
   .contact-container {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
+
   .contact-left-pane {
+    width: 100%;
+    height: var(--top-pane-height, 210px);
+    flex-shrink: 0;
     border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-bottom: none;
+    overflow-y: auto;
+    transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  .contact-container.is-dragging .contact-left-pane {
+    transition: none !important;
+  }
+
+  .cl-header,
+  .comm-card,
+  .cl-response-box {
+    flex-shrink: 0;
+  }
+
+  .contact-demarcation-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 34px;
+    padding: 0 12px;
+    background: var(--bg-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: ns-resize;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+    gap: 8px;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .contact-demarcation-bar:hover,
+  .contact-demarcation-bar.dragging {
+    background: var(--bg-3);
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .cd-grip-zone {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    cursor: ns-resize;
+  }
+
+  .cd-grip-icon {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+
+  .contact-demarcation-bar.dragging .cd-grip-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px var(--accent));
+  }
+
+  .cd-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .cd-hint {
+    font-size: 8px;
+    color: var(--text-2);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    opacity: 0.7;
+  }
+
+  .cd-presets {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .cd-pill {
+    background: var(--surface-glass-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: var(--text-1);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .cd-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .cd-pill.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow);
+  }
+
+  .contact-right-pane {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
   .cf-row {
     grid-template-columns: 1fr;
   }
