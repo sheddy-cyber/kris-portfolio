@@ -66,7 +66,6 @@
     <div class="contact-right-pane">
       <div class="cr-header">
         <span class="cr-title">ENCRYPTED MESSAGE DISPATCHER</span>
-        <span class="cr-enc-badge">RSA-4096 PGP</span>
       </div>
 
       <form class="contact-form" @submit.prevent="sendMessage">
@@ -441,15 +440,6 @@ async function sendMessage() {
   font-weight: 700;
   letter-spacing: 1.5px;
   color: var(--accent);
-}
-
-.cr-enc-badge {
-  font-size: 8px;
-  background: var(--green-dim);
-  color: var(--green);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  padding: 2px 6px;
-  border-radius: 3px;
 }
 
 .contact-form {
